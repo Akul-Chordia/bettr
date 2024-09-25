@@ -1,0 +1,82 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Betcha</title>
+    <!-- Link to the compiled Tailwind CSS file -->
+    <link href="{% static 'css/output.css' %}" rel="stylesheet">
+    <style>
+        /* Initially hide the dropdown */
+        .dropdown-menu {
+            position: absolute;
+            right: 0;
+            margin-top: 10px; /* Add margin to prevent overlap with navbar */
+            background-color: #1F2937; /* Tailwind's gray-800 */
+            border-radius: 0.5rem;
+            width: 200px; /* Fixed width for consistency */
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.3s ease-in-out;
+        }
+
+        /* Show the dropdown when toggled */
+        .dropdown-menu.show {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+    <!-- Navbar -->
+    <nav class="flex justify-between items-center p-4">
+        <div class="text-3xl font-bold">BETCHA</div>
+        <div class="flex items-center space-x-4">
+            <input type="text" placeholder="Search" class="p-2 rounded bg-gray-800 text-white" style="width: 650px;">
+            <button class="px-4 py-2 rounded" style="background-color: #3B82F6; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#2563EB'" onmouseout="this.style.backgroundColor='#3B82F6'">Sign Up</button>
+            <button class="px-4 py-2 rounded" style="background-color: #3B82F6; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#2563EB'" onmouseout="this.style.backgroundColor='#3B82F6'" onclick="openLoginModal()">Login</button>
+            <div class="relative">
+                <div class="text-3xl cursor-pointer" onclick="toggleDropdown()">☰</div> <!-- Hamburger Menu -->
+                <!-- Dropdown Menu -->
+                <div id="dropdown" class="dropdown-menu">
+                    <button class="block px-4 py-2 text-left w-full hover:bg-gray-700">Profile</button>
+                    <button class="block px-4 py-2 text-left w-full hover:bg-gray-700">Wallet</button>
+                    <button class="block px-4 py-2 text-left w-full hover:bg-gray-700">Logout</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Catchphrase Section -->
+    <div class="flex flex-col items-center mt-16">
+        <h1 class="text-4xl font-bold mb-4">CATCHY CATCH PHRASE</h1>
+
+        <!-- Info Sections -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 max-w-4xl mx-auto">
+            <div class="bg-gray-800 p-8 rounded">Info about website</div>
+            <div class="bg-gray-800 p-8 rounded">Info about website</div>
+            <div class="bg-gray-800 p-8 rounded">Info about website</div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal hidden fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+     <div class="modal-content bg-gray-800 p-6 rounded">
+        <h2 class="text-2xl font-bold mb-4">Login</h2>
+        <form id="loginForm" method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Username" required class="p-2 mb-4 rounded bg-gray-700 text-white w-full">
+            <input type="password" name="password" placeholder="Password" required class="p-2 mb-4 rounded bg-gray-700 text-white w-full">
+            <button type="submit" class="w-full py-2 rounded bg-blue-600 hover:bg-blue-500">Login</button>
+        </form>
+        <button class="mt-4 text-gray-400" onclick="closeLoginModal()">Close</button>
+    </div>
+</div>
+
+
+
+    <!-- Link to the external JavaScript file -->
+    <script src="{% static 'js/dropdown.js' %}"></script>
+</body>
+</html>
