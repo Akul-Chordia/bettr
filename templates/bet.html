@@ -1,0 +1,146 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create a Bet</title>
+    <link href="{% static 'css/output.css' %}" rel="stylesheet">
+    <style>
+        /* Tailwind overrides and custom styling */
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.7); /* Dark transparent background */
+            transition: opacity 0.3s ease-in-out; /* Smooth fade-in for modal */
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+            display: none; /* Hidden by default */
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out; /* Smooth fade-in for modal */
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1; /* Make modal visible */
+        }
+
+        .modal-content {
+            background-color: #1F2937; /* Tailwind's gray-800 */
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3); /* Add shadow for depth */
+            transform: translateY(-20px);
+            transition: transform 0.3s ease-in-out; /* Slide-in animation */
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0); /* Animate from top to center */
+        }
+
+        /* Enhanced form input styles */
+        input, textarea, select {
+            border: none;
+            background-color: #374151; /* Tailwind's gray-700 */
+            color: #D1D5DB; /* Tailwind's gray-300 */
+            padding: 0.75rem;
+            width: 100%;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            background-color: #4B5563; /* Slightly lighter for focus effect */
+            outline: none;
+        }
+
+        /* Button styling */
+        button {
+            transition: background-color 0.3s ease-in-out, transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px); /* Subtle hover effect */
+        }
+
+        .bg-green-600:hover {
+            background-color: #16A34A; /* Brighter green on hover */
+        }
+
+        .bg-red-600:hover {
+            background-color: #DC2626; /* Brighter red on hover */
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+
+<!-- Main Bet Page Content -->
+<div class="flex justify-center items-center h-screen">
+    <button onclick="openBetModal()" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-lg">Create Bet</button>
+</div>
+
+<!-- Modal -->
+<div id="betModal" class="modal modal-overlay">
+    <div class="modal-content text-white">
+        <h2 class="text-3xl font-bold text-center mb-6">Create a Bet</h2>
+        <form method="POST" action="{% url 'make_bet' %}" class="space-y-4">
+            {% csrf_token %}
+            <div>
+                <label for="bet_recipient" class="block text-sm font-medium text-gray-300">Bet Recipient Username:</label>
+                <input type="text" id="bet_recipient" name="bet_recipient" class="w-full p-3 bg-gray-800 text-white rounded-md" required>
+            </div>
+            <div>
+                <label for="arbitrator" class="block text-sm font-medium text-gray-300">Arbitrator Username (optional, default 'admin'):</label>
+                <input type="text" id="arbitrator" name="arbitrator" class="w-full p-3 bg-gray-800 text-white rounded-md">
+            </div>
+            <div>
+                <label for="amount" class="block text-sm font-medium text-gray-300">Bet Amount:</label>
+                <input type="number" id="amount" name="amount" step="0.01" class="w-full p-3 bg-gray-800 text-white rounded-md" required>
+            </div>
+            <div>
+                <label for="currency" class="block text-sm font-medium text-gray-300">Currency:</label>
+                <select id="currency" name="currency" class="w-full p-3 bg-gray-800 text-white rounded-md" required>
+                    <option value="USD">USD</option>
+                    <option value="INR">INR</option>
+                </select>
+            </div>
+            <div>
+                <label for="terms" class="block text-sm font-medium text-gray-300">Terms of the bet :</label>
+                <textarea id="terms" name="terms" class="w-full p-3 bg-gray-800 text-white rounded-md"
+                          rows="3"></textarea>
+            </div>
+            <div class="flex justify-between items-center pt-4">
+                <button type="submit" class="bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-6 rounded-lg">Submit Bet</button>
+                <button type="button" class="bg-red-600 hover:bg-red-500 text-white font-bold py-3 px-6 rounded-lg" onclick="closeBetModal()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- JavaScript for modal control -->
+<script>
+    function openBetModal() {
+        document.getElementById('betModal').classList.add('active');
+    }
+
+    function closeBetModal() {
+        document.getElementById('betModal').classList.remove('active');
+    }
+
+    window.addEventListener('click', function(event) {
+        const modal = document.getElementById('betModal');
+        if (event.target === modal) {
+            closeBetModal();
+        }
+    });
+</script>
+
+</body>
+</html>

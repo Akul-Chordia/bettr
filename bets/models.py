@@ -21,25 +21,27 @@ class Transaction(models.Model):
 
 
 class Bet(models.Model):
-    party_0 = models.ForeignKey(User, related_name='bets_as_party_0', on_delete=models.CASCADE)
-    party_1 = models.ForeignKey(User, related_name='bets_as_party_1', on_delete=models.CASCADE)
+    bet_maker = models.ForeignKey(User, related_name='betting_side', on_delete=models.CASCADE, default=1)
+    bet_recipient = models.ForeignKey(User, related_name='bet_opposing_side', on_delete=models.CASCADE, default=1)
+    bet_active = models.BooleanField(default=False)
     arbitrator = models.ForeignKey(User, related_name='arbitrated_bets', null=True, blank=True, on_delete=models.SET_NULL)
     winner = models.ForeignKey(User, related_name='won_bets', null=True, blank=True, on_delete=models.SET_NULL)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     currency = models.CharField(max_length=3, choices=[('USD', 'USD'), ('INR','INR')])
-    verified_0 = models.BooleanField(default=False)  # Verification by Party 0
-    verified_1 = models.BooleanField(default=False)  # Verification by Party 1
-    settled = models.BooleanField(default=False)     # Whether the bet is settled
+    terms = models.TextField(default="terms and conditions")
+    verified_0 = models.BooleanField(default=False)
+    verified_1 = models.BooleanField(default=False)
+    settled = models.BooleanField(default=False)
     placed_at = models.DateTimeField(auto_now_add=True)
     settled_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return f"Bet: {self.party_0} vs {self.party_1} for {self.amount}"
+        return f"Bet: {self.bet_maker} vs {self.bet_recipient} for {self.amount}"
 
 class Dispute(models.Model):
-    bet = models.OneToOneField(Bet, on_delete=models.CASCADE)  # Link each dispute to one bet
+    bet = models.OneToOneField(Bet, on_delete=models.CASCADE)
     arbitrator = models.ForeignKey(User, related_name='dispute_arbitrations', on_delete=models.CASCADE)
-    resolution = models.TextField(blank=True, null=True)  # Optional field to capture dispute resolution
+    resolution = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f"Dispute for Bet ID {self.bet.id} (Arbitrator: {self.arbitrator.username})"
