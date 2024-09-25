@@ -729,27 +729,61 @@ video {
   outline-style: solid;
 }
 
-/* In your static CSS file */
+/* Improved Modal Design */
+#loginModal .bg-gray-800 {
+    border-radius: 1rem; /* More rounded */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); /* Added shadow for depth */
+}
+
+/* Input fields styling */
+#loginModal input {
+    padding: 1rem; /* Increased padding for input fields */
+    border-radius: 0.5rem;
+    background-color: #2D3748; /* Gray-700 */
+    border: none;
+    color: white;
+    transition: border 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+#loginModal input:focus {
+    outline: none;
+    box-shadow: 0 0 5px #3B82F6; /* Blue glow on focus */
+    border: 1px solid #3B82F6;  /* Blue border on focus */
+}
+
+/* Login and Close Buttons */
+#loginModal button {
+    font-weight: bold;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s ease;
+}
+
+#loginModal button:hover {
+    background-color: #2563EB; /* Darker blue on hover */
+}
+
+#loginModal #closeModal:hover {
+    background-color: #DC2626; /* Darker red on hover */
+}
+
+/* Modal animations */
 #loginModal {
-    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
-    backdrop-filter: blur(5px); /* Optional: Adds blur effect to background */
+    animation: fadeIn 0.3s ease-in-out;
 }
 
-#loginModal > div {
-    animation: slide-in 0.3s ease; /* Animation when modal appears */
-}
-
-/* Animation */
-@keyframes slide-in {
+@keyframes fadeIn {
     from {
-        transform: translateY(-20px);
         opacity: 0;
+        transform: translateY(-20px);
     }
     to {
-        transform: translateY(0);
         opacity: 1;
+        transform: translateY(0);
     }
 }
+
+
 
 @media (min-width: 768px) {
   .md\:grid-cols-3 {

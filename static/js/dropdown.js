@@ -1,5 +1,3 @@
-// dropdown.js
-
 function toggleDropdown() {
     var dropdown = document.getElementById('dropdown');
     dropdown.classList.toggle('show');
@@ -16,22 +14,14 @@ function closeLoginModal() {
     modal.classList.add('hidden'); // Hide the modal
     modal.classList.remove('flex'); // Remove flex class when hidden
 }
-
-function toggleLoginModal() {
-    const modal = document.getElementById('loginModal');
-    modal.classList.toggle('hidden'); // Toggle visibility of the modal
-    modal.classList.toggle('flex'); // Toggle flex class for centering
+function logout() {
+    // Redirect to logout URL
+    window.location.href = '/logout/';
 }
 
 // Add event listeners for modal actions
 document.addEventListener('DOMContentLoaded', function () {
-    const loginBtn = document.querySelector('.login-btn'); // Update if necessary
     const closeModal = document.getElementById('closeModal');
-
-    // Show the modal when the login button is clicked
-    if (loginBtn) {
-        loginBtn.addEventListener('click', openLoginModal);
-    }
 
     // Hide the modal when the close button is clicked
     if (closeModal) {

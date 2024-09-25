@@ -17,6 +17,7 @@ Including another URLconf
 
 # betcha/urls.py
 
+
 from django.contrib import admin
 from django.urls import path
 from bets import views  # Import your views
@@ -27,6 +28,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),  # Set the index view to the home ('') URL
     path('login/', views.login_view, name='login'),  # Use views.login_view directly
+    path('logout/', views.logout_view, name='logout'),
+    path('profile/', views.profile_view, name='profile'),
+
 ]
 
 # Serve static files during development
