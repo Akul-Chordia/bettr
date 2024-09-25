@@ -30,6 +30,9 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),  # Use views.login_view directly
     path('logout/', views.logout_view, name='logout'),
     path('profile/', views.profile_view, name='profile'),
+    path('signup/', views.create_user_profile, name='signup'),
+    path('bet/', views.bet_view, name='bet'),
+    path('make_bet/', views.make_bet, name='make_bet'),
 
 ]
 

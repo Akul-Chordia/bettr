@@ -44,11 +44,21 @@ def create_user_profile(request):
         try:
             dob = datetime.strptime(dob_str , "%d-%m-%Y").date()
         except ValueError:
-            return {"error": "Invalid date format. Please use DD-MM-YYYY."}
+            message = "Invalid date format. Please use DD-MM-YYYY."
+            return render(request , 'index.html' , {'message': message})
 
         age = today.year - dob.year - ((today.month , today.day) < (dob.month , dob.day))
         if age < 18:
-            return {"error": "User must be at least 18 years old to register."}
+            message = "User must be at least 18 years old to register."
+            return render(request , 'index.html' , {'message': message})
+
+        if User.objects.filter(username=username).exists():
+            message = "Username already taken. Please choose another one."
+            return render(request , 'index.html' , {'message': message})
+
+        if User.objects.filter(email=email).exists():
+            message = "Email already in use. Please choose another one."
+            return render(request , 'index.html' , {'message': message})
 
         user = User.objects.create_user(username=username , first_name=first_name , last_name=last_name , email=email ,
                                         password=password)
@@ -56,10 +66,16 @@ def create_user_profile(request):
         user_wallet = UserWallet(user=user , wallet_balance=wallet_balance)
         user_wallet.save()
 
-        print(f"User {username} created successfully with ID: {user.id}!")
-        return redirect('index')  # Redirect to the home page after successful registration
+        message = f"User {username} created successfully!"
+        user = authenticate(request , username=username , password=password)
+        if user is not None:
+            login(request , user)
+            return redirect('index')
 
-    return render(request, 'index.html')  # Render the index page for GET requests
+        return render(request , 'index.html' , {'message': message})
+
+    return render(request , 'index.html')
+
 
 def profile_view(request):
     if request.user.is_authenticated:

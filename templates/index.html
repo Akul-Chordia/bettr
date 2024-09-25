@@ -5,23 +5,134 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Betcha</title>
-    <!-- Link to the compiled Tailwind CSS file -->
     <link href="{% static 'css/output.css' %}" rel="stylesheet">
     <style>
-        /* Initially hide the dropdown */
+        /* Advanced Modal Styles */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.6); /* Dark transparent overlay */
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            transition: opacity 0.4s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background-color: #1F2937; /* Tailwind's gray-800 */
+            border-radius: 1rem;
+            padding: 2rem;
+            width: 100%;
+            max-width: 450px; /* Improved modal width */
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5); /* Deep shadow effect */
+            position: relative;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+            opacity: 0;
+            transform: translateY(-100px); /* Modal slide-in animation */
+        }
+
+        .modal.active .modal-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h2 {
+            font-size: 1.75rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #374151; /* Tailwind's gray-700 */
+            border-radius: 0.5rem;
+            background-color: #111827; /* Tailwind's gray-900 */
+            color: #fff;
+            margin-bottom: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-field:focus {
+            border-color: #3B82F6; /* Tailwind's blue-500 */
+            outline: none;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #3B82F6; /* Tailwind's blue-500 */
+            border: none;
+            border-radius: 0.5rem;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-button:hover {
+            background-color: #2563EB; /* Darker blue for hover effect */
+        }
+
+        .close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+
+        /* Sign-Up Modal Specific Styles */
+        .signup-modal-content {
+            background-color: #1F2937; /* Tailwind's blue-800 */
+        }
+
+        .signup-modal-content h2 {
+            color: #60A5FA; /* Light blue for header text */
+        }
+
+        .signup-modal-content .input-field {
+            background-color: #111827; /* Darker background for inputs */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            .modal-content {
+                padding: 1.5rem;
+                max-width: 100%;
+                margin: 0 1rem;
+            }
+        }
+
+        /* Dropdown Styles */
         .dropdown-menu {
             position: absolute;
             right: 0;
-            margin-top: 10px; /* Add margin to prevent overlap with navbar */
+            margin-top: 10px;
             background-color: #1F2937; /* Tailwind's gray-800 */
             border-radius: 0.5rem;
-            width: 200px; /* Fixed width for consistency */
+            width: 200px;
             visibility: hidden;
             opacity: 0;
             transition: visibility 0s, opacity 0.3s ease-in-out;
         }
 
-        /* Show the dropdown when toggled */
         .dropdown-menu.show {
             visibility: visible;
             opacity: 1;
@@ -36,21 +147,20 @@
             <input type="text" placeholder="Search" class="p-2 rounded bg-gray-800 text-white" style="width: 650px;">
             {% if user.is_authenticated %}
                 <div class="text-white">Welcome, {{ user.username }}!</div>
-                <button class="px-4 py-2 rounded bg-red-600" onclick="logout()">Logout</button>
+                <button class="block px-4 py-2 text-left w-full hover:bg-gray-700" onclick="logout()">Logout</button>
             {% else %}
-                <button class="px-4 py-2 rounded" style="background-color: #3B82F6; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#2563EB'" onmouseout="this.style.backgroundColor='#3B82F6'" onclick="openLoginModal()">Login</button>
-                <button class="px-4 py-2 rounded" style="background-color: #3B82F6; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#2563EB'" onmouseout="this.style.backgroundColor='#3B82F6'">Sign Up</button>
+                <button onclick="openLoginModal()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded">Login</button>
+                <button onclick="openSignupModal()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded">Sign Up</button>
             {% endif %}
             <div class="relative">
                 <div class="text-3xl cursor-pointer" onclick="toggleDropdown()">☰</div> <!-- Hamburger Menu -->
-                <!-- Dropdown Menu -->
                 <div id="dropdown" class="dropdown-menu">
                     {% if user.is_authenticated %}
                         <a href="{% url 'profile' %}" class="block px-4 py-2 text-left w-full hover:bg-gray-700">Profile</a>
                         <button class="block px-4 py-2 text-left w-full hover:bg-gray-700" onclick="logout()">Logout</button>
                     {% else %}
-                        <button class="block px-4 py-2 text-left w-full hover:bg-gray-700">Login</button>
-                        <button class="block px-4 py-2 text-left w-full hover:bg-gray-700">Sign Up</button>
+                        <button class="block px-4 py-2 text-left w-full hover:bg-gray-700" onclick="openLoginModal()">Login</button>
+                        <button class="block px-4 py-2 text-left w-full hover:bg-gray-700" onclick="openSignupModal()">Sign Up</button>
                     {% endif %}
                 </div>
             </div>
@@ -60,8 +170,6 @@
     <!-- Catchphrase Section -->
     <div class="flex flex-col items-center mt-16">
         <h1 class="text-4xl font-bold mb-4">CATCHY CATCH PHRASE</h1>
-
-        <!-- Info Sections -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 max-w-4xl mx-auto">
             <div class="bg-gray-800 p-8 rounded">Info about website</div>
             <div class="bg-gray-800 p-8 rounded">Info about website</div>
@@ -69,38 +177,44 @@
         </div>
     </div>
 
-<!-- Login Modal -->
-<div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-    <div class="bg-gray-800 rounded-lg p-8 w-96 shadow-lg transition-transform transform duration-300 ease-in-out scale-100">
-        <h2 class="text-2xl font-bold mb-6 text-center text-blue-400">Login</h2>
-        <form method="POST" action="{% url 'login' %}">
-            {% csrf_token %}
-            <input type="text" name="username" placeholder="Username" class="w-full p-3 mb-4 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-200" required />
-            <input type="password" name="password" placeholder="Password" class="w-full p-3 mb-6 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-200" required />
-            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 rounded-lg transition-colors duration-200">Login</button>
-        </form>
-        <button class="mt-4 w-full bg-red-600 hover:bg-red-500 text-white font-semibold py-2 rounded-lg transition-colors duration-200" onclick="closeLoginModal()">Close</button>
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <button class="close-button">&times;</button>
+            <div class="modal-header">
+                <h2>Login</h2>
+            </div>
+            <form method="POST" action="{% url 'login' %}">
+                {% csrf_token %}
+                <input type="text" name="username" placeholder="Username" class="input-field" required />
+                <input type="password" name="password" placeholder="Password" class="input-field" required />
+                <button type="submit" class="submit-button">Login</button>
+            </form>
+        </div>
     </div>
-</div>
 
-
-
-
-    {% if messages %}
-    <div class="absolute top-0 right-0 mt-4 mr-4">
-        {% for message in messages %}
-            <div class="bg-red-600 text-white p-2 rounded">{{ message }}</div>
-        {% endfor %}
+    <!-- Sign-Up Modal -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content signup-modal-content">
+            <button class="close-button">&times;</button>
+            <div class="modal-header">
+                <h2>Sign Up</h2>
+            </div>
+            <form method="POST" action="{% url 'signup' %}">
+                {% csrf_token %}
+                <input type="email" name="email" placeholder="Email" class="input-field" required />
+                <input type="text" name="first_name" placeholder="First Name" class="input-field" required />
+                <input type="text" name="last_name" placeholder="Last Name" class="input-field" required />
+                <input type="text" name="dob" placeholder="Date of Birth (DD-MM-YYYY)" class="input-field" required />
+                <input type="text" name="username" placeholder="Username" class="input-field" required />
+                <input type="password" name="password" placeholder="Password" class="input-field" required />
+                <button type="submit" class="submit-button">Sign Up</button>
+            </form>
+        </div>
     </div>
-    {% endif %}
 
-    <!-- Link to the external JavaScript file -->
+    <!-- Linking to dropdown.js -->
     <script src="{% static 'js/dropdown.js' %}"></script>
-    <script>
-        function logout() {
-            // Redirect to logout URL
-            window.location.href = '/logout/';
-        }
-    </script>
+
 </body>
 </html>
