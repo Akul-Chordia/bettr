@@ -22,9 +22,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),  # Set the index view to the home ('') URL
+
 ]
 
 # Serve static files during development
