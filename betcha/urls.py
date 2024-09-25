@@ -15,19 +15,21 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+# betcha/urls.py
+
 from django.contrib import admin
 from django.urls import path
-from bets import views  # Import your view
+from bets import views  # Import your views
 from django.conf import settings
 from django.conf.urls.static import static
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),  # Set the index view to the home ('') URL
-
+    path('login/', views.login_view, name='login'),  # Use views.login_view directly
 ]
 
 # Serve static files during development
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
