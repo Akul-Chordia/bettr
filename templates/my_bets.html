@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bets</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for popup visibility */
+        .popup {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 2px solid #ddd;
+            padding: 1rem;
+            box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            width: 250px;
+            max-width: 100%;
+            top: 100%; /* Position it below the row */
+            left: 0;
+            transform: translateY(10px); /* Add space between row and popup */
+        }
+
+        /* Ensure popup appears near the row */
+        .row-container {
+            position: relative;
+        }
+
+        /* Show popup on hover */
+        .row-container:hover .popup {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-8">
+
+    <h2 class="text-2xl font-bold mb-6">My Bets</h2>
+
+    {% if my_bets %}
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="py-3 px-5 text-left">Status</th>
+                    <th class="py-3 px-5 text-left">Opposing Party</th>
+                    <th class="py-3 px-5 text-left">Amount</th>
+                    <th class="py-3 px-5 text-left">Currency</th>
+                    <th class="py-3 px-5 text-left">Placed At</th>
+                    <th class="py-3 px-5 text-left">Verify</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bet in my_bets %}
+                <tr class="row-container bg-white border-b hover:bg-gray-50 relative">
+                    <td class="py-3 px-5">{{ bet.bet_active }}</td>
+                    <td class="py-3 px-5">
+                        {% if bet.bet_maker == request.user %}
+                            {{ bet.bet_recipient.username }}
+                        {% else %}
+                            {{ bet.bet_maker.username }}
+                        {% endif %}
+                    </td>
+                    <td class="py-3 px-5">{{ bet.amount }}</td>
+                    <td class="py-3 px-5">{{ bet.currency }}</td>
+                    <td class="py-3 px-5">{{ bet.placed_at }}</td>
+                    <td class="py-3 px-5">
+                        {% if not bet.verified_0 or not bet.verified_1 %}
+                            <button class="bg-blue-500 text-white px-4 py-1 rounded-lg">Verify</button>
+                        {% else %}
+                            Verified
+                        {% endif %}
+                    </td>
+
+                    <!-- Popup div for displaying terms -->
+                    <div class="popup">
+                        <strong>Terms and Conditions:</strong>
+                        <p>{{ bet.terms }}</p>
+                    </div>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="text-gray-600">You have no bets.</p>
+    {% endif %}
+
+</body>
+</html>
