@@ -28,6 +28,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),  # Set the index view to the home ('') URL
     path('login/', views.login_view, name='login'),  # Use views.login_view directly
+    path('notifications/', views.notification_view, name='notifications'),
     path('logout/', views.logout_view, name='logout'),
     path('profile/', views.profile_view, name='profile'),
     path('signup/', views.create_user_profile, name='signup'),

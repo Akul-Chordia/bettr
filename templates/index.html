@@ -177,6 +177,30 @@
         </div>
     </div>
 
+    <!-- Notification Modal -->
+    <div id="notifModal" class="modal {% if notifications %}active{% endif %}">
+    <div class="modal-content">
+        <button class="close-button" onclick="closeNotifModal()">&times;</button>
+        <div class="modal-header">
+            <h2>Notifications</h2>
+        </div>
+        <div class="modal-body">
+            {% if notifications %}
+                <ul>
+                    {% for notification in notifications %}
+                        {%if (notification.notification_type === 'bet_invite')%}
+                        <li>{{ notification.bet_id }}</li>
+
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No new notifications.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
     <!-- Login Modal -->
     <div id="loginModal" class="modal">
         <div class="modal-content">

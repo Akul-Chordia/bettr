@@ -32,6 +32,7 @@ function closeSignupModal() {
 window.addEventListener('click', function (event) {
     const loginModal = document.getElementById('loginModal');
     const signupModal = document.getElementById('signupModal');
+    const notifModal = document.getElementById('notifModal');
 
     // Check if the login modal is active and if the click is outside of it
     if (loginModal.classList.contains('active') && event.target === loginModal) {
@@ -42,10 +43,13 @@ window.addEventListener('click', function (event) {
     if (signupModal.classList.contains('active') && event.target === signupModal) {
         closeSignupModal();
     }
+
+    if (notifModal.classList.contains('active') && event.target === notifModal) {
+        closeNotifModal();
+    }
 });
 
 function logout() {
-    // Redirect to logout URL
     window.location.href = '/logout/';
 }
 
@@ -58,3 +62,14 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('#signupModal .close-button').addEventListener('click', closeSignupModal);
 });
 
+
+function openNotifModal() {
+    const modal = document.getElementById('notifModal');
+    modal.classList.add('active');
+}
+
+// Close the notif modal
+function closeNotifModal() {
+    const modal = document.getElementById('notifModal');
+    modal.classList.remove('active'); // Hide the modal
+}

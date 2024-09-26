@@ -38,10 +38,26 @@ class Bet(models.Model):
     def __str__(self):
         return f"Bet: {self.bet_maker} vs {self.bet_recipient} for {self.amount}"
 
-class Dispute(models.Model):
-    bet = models.OneToOneField(Bet, on_delete=models.CASCADE)
-    arbitrator = models.ForeignKey(User, related_name='dispute_arbitrations', on_delete=models.CASCADE)
-    resolution = models.TextField(blank=True, null=True)
+class Notification(models.Model):
+    NOTIFICATION_TYPES = [
+        ('bet_invite', 'Bet Invitation'),
+        ('claim_verification', 'Claim Verification'),
+        ('arbitration_request', 'Arbitration Request'),
+    ]
+
+    user_to = models.ForeignKey(User, on_delete=models.CASCADE)
+    notification_type = models.CharField(max_length=20, choices=NOTIFICATION_TYPES)
+    bet = models.ForeignKey(Bet, on_delete=models.CASCADE)
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Dispute for Bet ID {self.bet.id} (Arbitrator: {self.arbitrator.username})"
+        return f"{self.user_to.username} - {self.notification_type}"
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    dob = models.DateField(null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.user.username} Profile'

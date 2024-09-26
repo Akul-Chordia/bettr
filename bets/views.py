@@ -1,12 +1,14 @@
-
 from django.contrib.auth import authenticate , login , logout
-from .models import Bet
+from django.contrib.auth.decorators import login_required
+
+from .models import Bet , Notification
 from django.utils import timezone
 from datetime import datetime
 from django.contrib.auth.models import User
 from .models import UserWallet
 from django.shortcuts import render , redirect
 from django.contrib import messages
+
 
 def index(request):
     return render(request , 'index.html')
@@ -28,6 +30,7 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('index')  # Redirect to the home page after logout
+
 
 def create_user_profile(request):
     if request.method == 'POST':
@@ -82,9 +85,11 @@ def profile_view(request):
         return render(request , 'profile.html' , {'user': request.user})
     return redirect('login')  # Redirect to login if not authenticated
 
+
 def bet_view(request):
     """Render the bet creation page."""
     return render(request , 'bet.html')
+
 
 def make_bet(request):
     if request.method == 'POST':
@@ -123,6 +128,13 @@ def make_bet(request):
             terms=terms
         )
         bet.save()
+
+        Notification.objects.create(
+            user_to=bet_recipient ,
+            notification_type='bet_invite' ,
+            bet=bet ,
+            is_read=False
+        )
 
         messages.success(request ,
                          f"Bet created between {bet_maker.username} and {bet_recipient.username} for {amount} {currency}.")
