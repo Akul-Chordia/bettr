@@ -82,9 +82,7 @@
 <body class="bg-gray-900 text-white">
 
 <!-- Main Bet Page Content -->
-<div class="flex justify-center items-center h-screen">
-    <button onclick="openBetModal()" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-lg">Create Bet</button>
-</div>
+
 
 <!-- Modal -->
 <div id="betModal" class="modal modal-overlay">
@@ -140,6 +138,9 @@
             closeBetModal();
         }
     });
+
+    // Open the modal automatically when the page loads
+    window.addEventListener('DOMContentLoaded', openBetModal);
 </script>
 
 </body>

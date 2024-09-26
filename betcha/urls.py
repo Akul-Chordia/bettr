@@ -34,6 +34,10 @@ urlpatterns = [
     path('signup/', views.create_user_profile, name='signup'),
     path('bet/', views.bet_view, name='bet'),
     path('make_bet/', views.make_bet, name='make_bet'),
+    path('wallet/' , views.wallet , name='wallet') ,
+    path('my-bets/', views.my_bets_view, name='my_bets'),
+    path('profile/' , views.profile_view , name='profile') ,
+
 
 ]
 

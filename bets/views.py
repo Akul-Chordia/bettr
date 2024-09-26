@@ -153,3 +153,49 @@ def add_money(request):
 
 def transaction(request):
     return 0
+
+
+@login_required
+def profile_view(request):
+    if request.method == 'POST':
+        user = request.user
+        user.username = request.POST['username']
+        user.email = request.POST['email']
+        user.first_name = request.POST['first_name']
+        user.last_name = request.POST['last_name']
+        user.save()
+
+        return redirect('index')  # Redirect to the index page after saving changes
+
+    return render(request , 'profile.html')
+
+
+@login_required
+def my_bets_view(request):
+    user = request.user
+    # Query to get bets where the logged-in user is either the bet_maker or bet_recipient
+    my_bets = Bet.objects.filter(bet_maker=user) | Bet.objects.filter(bet_recipient=user)
+
+    # Ensure no duplicate results (if any)
+    my_bets = my_bets.distinct()
+
+    # Debugging: Print the bets to verify they are being retrieved correctly
+    print("Retrieved Bets:")
+    for bet in my_bets:
+        print(bet)
+
+    # Pass the bets to the context
+    context = {
+        'my_bets': my_bets ,
+    }
+    return render(request , 'my_bets.html' , context)  # Update with your actual template path
+
+
+@login_required
+def wallet(request):
+    return render(request , 'wallet.html')  # Update with your actual template path
+
+
+def notification_view(request):
+    notifications = Notification.objects.filter(user_to=request.user , is_read=False)
+    return render(request , 'index.html' , {'notifications': notifications})
