@@ -1,5 +1,8 @@
 from datetime import datetime
+from decimal import Decimal
 
+import stripe
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate , login , logout
 from django.contrib.auth.decorators import login_required
@@ -8,6 +11,8 @@ from django.shortcuts import render , redirect
 from django.utils import timezone
 
 from .models import Bet , Notification , UserWallet , Transaction
+
+stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
 
 
 def index(request):
@@ -21,15 +26,15 @@ def login_view(request):
         user = authenticate(request , username=username , password=password)
         if user is not None:
             login(request , user)
-            return redirect('index')  # Redirect to the home page or index
+            return redirect('index')
         else:
             messages.error(request , 'Invalid username or password')
-    return render(request , 'index.html')  # Render the index page for GET requests
+    return render(request , 'index.html')
 
 
 def logout_view(request):
     logout(request)
-    return redirect('index')  # Redirect to the home page after logout
+    return redirect('index')
 
 
 def create_user_profile(request):
@@ -66,7 +71,7 @@ def create_user_profile(request):
         user = User.objects.create_user(username=username , first_name=first_name , last_name=last_name , email=email ,
                                         password=password)
         user.save()
-        user_wallet = UserWallet(user=user , wallet_balance=wallet_balance)
+        user_wallet = UserWallet.objects.create(user_id=user.id , wallet_balance=wallet_balance, on_hold_balance=0.00)
         user_wallet.save()
 
         message = f"User {username} created successfully!"
@@ -83,11 +88,10 @@ def create_user_profile(request):
 def profile_view(request):
     if request.user.is_authenticated:
         return render(request , 'profile.html' , {'user': request.user})
-    return redirect('login')  # Redirect to login if not authenticated
+    return redirect('login')
 
 
 def bet_view(request):
-    """Render the bet creation page."""
     return render(request , 'bet.html')
 
 
@@ -99,7 +103,7 @@ def make_bet(request):
         currency = request.POST.get('currency')
         terms = request.POST.get('terms')
         bet_maker = request.user
-
+        amount = Decimal(amount)
         try:
             bet_recipient = User.objects.get(username=bet_recipient_username)
             arbitrator = User.objects.get(username=arbitrator_username)
@@ -112,35 +116,31 @@ def make_bet(request):
                 'currency': currency ,
                 'terms': terms ,
             })
-
-        user_wallet = UserWallet.objects.filter(user_id=request.user)
+        user_wallet = UserWallet.objects.get(user_id=request.user)
         if user_wallet.wallet_balance < amount:
             messages.error(request , 'Bet amount must be less than than wallet amount.')
             return render(request , 'bet.html' , {
                 'bet_recipient': bet_recipient_username ,
                 'arbitrator': arbitrator_username ,
-                'amount': 0 ,
+                'amount': Decimal('0') ,
                 'currency': currency ,
                 'terms': terms ,
             })
         else:
             user_wallet.wallet_balance -= amount
             user_wallet.on_hold_balance += amount
-
+            user_wallet.save()
         bet = Bet.objects.create(
             bet_maker=bet_maker ,
             bet_recipient=bet_recipient ,
             arbitrator=arbitrator ,
             amount=amount ,
             currency=currency ,
-            verified_0=False ,
-            verified_1=False ,
             settled=False ,
             placed_at=datetime.now() ,
             terms=terms
         )
         bet.save()
-
         bet_notification = Notification.objects.create(
             user_to=bet_recipient ,
             notification_type='bet_invite' ,
@@ -153,7 +153,6 @@ def make_bet(request):
 
         messages.success(request ,
                          f"Bet created between {bet_maker.username} and {bet_recipient.username} for {amount} {currency}.")
-        return redirect('index')
 
     return render(request , 'bet.html')
 
@@ -163,12 +162,13 @@ def validate_bet(request):
         outcome = request.POST.get('outcome')
         bet_id = request.POST.get('bet')
         notification_id = request.POST.get('notification_id')
+        print(1)
 
         bet = Bet.objects.get(id=bet_id)
-        user_wallet = UserWallet.objects.filter(user_id=request.user)
-        sender_wallet = UserWallet.objects.filter(user_id=bet.bet_maker)
-        notification = Notification.objects.filter(id=notification_id)
-        if outcome == 1:
+        user_wallet = UserWallet.objects.get(user_id=request.user)
+        sender_wallet = UserWallet.objects.get(user_id=bet.bet_maker)
+        notification = Notification.objects.get(id=notification_id)
+        if outcome == '1':
             if user_wallet.wallet_balance < bet.amount:
                 messages.error(request , 'Bet amount must be less than than wallet amount.')
                 return render(request , 'wallet.html')
@@ -176,20 +176,20 @@ def validate_bet(request):
                 user_wallet.wallet_balance -= bet.amount
                 user_wallet.on_hold_balance += bet.amount
                 user_wallet.save()
-            transfer(bet.bet_maker , 1 , bet.amount , bet_id)
-            transfer(bet.bet_recipient , 1 , bet.amount , bet_id)
-            bet.bet_active = True
-            bet.save()
-            notification.is_read = True
-            notification.save()
-        elif outcome == 0:
+                transfer(bet.bet_maker_id , 1 , bet.amount , bet.id)
+                transfer(bet.bet_recipient_id , 1 , bet.amount , bet.id)
+                bet.bet_active = True
+                bet.save()
+                notification.is_read = True
+                notification.save()
+        elif outcome == '0':
             bet.delete()
             sender_wallet.on_hold_balance -= bet.amount
             sender_wallet.wallet_balance += bet.amount
             sender_wallet.save()
             notification.is_read = True
             notification.save()
-    return 0
+    return render(request , 'index.html')
 
 
 def claim_dispute(request):
@@ -198,7 +198,7 @@ def claim_dispute(request):
         bet_id = request.POST.get('bet')
         notification_id = request.POST.get('notification_id')
         bet = Bet.objects.get(id=bet_id)
-        notification = Notification.objects.filter(id=notification_id)
+        notification = Notification.objects.get(id=notification_id)
         notification.is_read = True
         notification.save()
 
@@ -256,9 +256,58 @@ def arbitrator_rule(request):
 def add_money(request):
     if request.method == 'POST':
         amount = request.POST.get('amount')
-        user_wallet = UserWallet.objects.filter(user_id=request.user)
-        user_wallet.wallet_balance += amount
-    return 0
+        card_number = request.POST.get('card_number')
+        card_expiry = request.POST.get('card_expiry')
+        card_cvc = request.POST.get('card_cvc')
+
+        exp_month , exp_year = card_expiry.split('/')
+        exp_month = int(exp_month)
+        exp_year = int(exp_year) + 2000
+
+        stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
+
+        try:
+            token = stripe.Token.create(
+                card={
+                    "number": card_number ,
+                    "exp_month": exp_month ,
+                    "exp_year": exp_year ,
+                    "cvc": card_cvc ,
+                }
+            )
+
+            charge = stripe.Charge.create(
+                amount=int(float(amount) * 100) ,
+                currency="usd" ,
+                source=token.id ,
+                description="Add money to wallet"
+            )
+
+            charge.save()
+
+            user_wallet = UserWallet.objects.get(user=request.user)
+            user_wallet.wallet_balance += Decimal(amount)
+            user_wallet.save()
+
+            messages.success(request , 'Money added successfully!')
+        except Exception as e:
+            messages.error(request , f'There was an error processing your payment: {str(e)}')
+
+    return redirect('wallet')
+
+
+def withdraw_money(request):
+    if request.method == 'POST':
+        amount = request.POST.get('amount')
+        amount = Decimal(amount)
+        user_wallet = UserWallet.objects.get(user_id=request.user)
+        if user_wallet.wallet_balance >= amount:
+            user_wallet.wallet_balance -= amount
+            user_wallet.save()
+        else:
+            messages.error(request , 'You don\'t have that much money brokie')
+    return redirect('wallet')
+
 
 def claim_bet(request):
     if request.method == 'POST':
@@ -269,9 +318,12 @@ def claim_bet(request):
             claimer = bet.bet_recipient
         elif request.user == bet.bet_recipient:
             claimer = bet.bet_maker
+        else:
+            messages.error(request , 'idk wtf went wrong you\'re never supposed to reach here')
+            return redirect('index.html')
 
         bet_notification = Notification.objects.create(
-            user_to = claimer ,
+            user_to=claimer ,
             notification_type='claim_verification' ,
             bet_id=bet.id ,
             created_at=datetime.now() ,
@@ -281,10 +333,11 @@ def claim_bet(request):
         bet_notification.save()
     return 0
 
-def transfer(sender_id , receiver_id , amount , bet_id):
-    sender_waller = UserWallet.objects.filter(user_id=sender_id)
-    receiver_wallet = UserWallet.objects.filter(user_id=receiver_id)
 
+def transfer(sender_id , receiver_id , amount , bet_id):
+    sender_waller = UserWallet.objects.get(user_id=sender_id)
+    receiver_wallet = UserWallet.objects.get(user_id=receiver_id)
+    amount = Decimal(amount)
     transaction = Transaction.objects.create(
         user_from_id=sender_id ,
         user_to_id=receiver_id ,
@@ -316,7 +369,7 @@ def profile_view(request):
         user.last_name = request.POST['last_name']
         user.save()
 
-        return redirect('index')  # Redirect to the index page after saving changes
+        return redirect('index')
 
     return render(request , 'profile.html')
 
@@ -324,27 +377,19 @@ def profile_view(request):
 @login_required
 def my_bets_view(request):
     user = request.user
-    # Query to get bets where the logged-in user is either the bet_maker or bet_recipient
     my_bets = Bet.objects.filter(bet_maker=user) | Bet.objects.filter(bet_recipient=user)
-
-    # Ensure no duplicate results (if any)
     my_bets = my_bets.distinct()
 
-    # Debugging: Print the bets to verify they are being retrieved correctly
-    print("Retrieved Bets:")
-    for bet in my_bets:
-        print(bet)
-
-    # Pass the bets to the context
     context = {
         'my_bets': my_bets ,
     }
-    return render(request , 'my_bets.html' , context)  # Update with your actual template path
+    return render(request , 'my_bets.html' , context)
 
 
 @login_required
 def wallet(request):
-    return render(request , 'wallet.html')  # Update with your actual template path
+    user_wallet = UserWallet.objects.get(user=request.user)
+    return render(request , 'wallet.html' , {'user_wallet': user_wallet})
 
 
 def notification_view(request):

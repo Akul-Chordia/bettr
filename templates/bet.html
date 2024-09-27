@@ -7,10 +7,10 @@
     <title>Create a Bet</title>
     <link href="{% static 'css/output.css' %}" rel="stylesheet">
     <style>
-        /* Tailwind overrides and custom styling */
+        /* Advanced Modal Styling */
         .modal-overlay {
-            background-color: rgba(0, 0, 0, 0.7); /* Dark transparent background */
-            transition: opacity 0.3s ease-in-out; /* Smooth fade-in for modal */
+            background-color: #111827;
+            transition: opacity 0.4s ease-in-out;
         }
 
         .modal {
@@ -20,62 +20,96 @@
             justify-content: center;
             align-items: center;
             z-index: 50;
-            display: none; /* Hidden by default */
+            display: none;
             opacity: 0;
-            transition: opacity 0.3s ease-in-out; /* Smooth fade-in for modal */
+            transition: opacity 0.4s ease-in-out, transform 0.3s ease-in-out;
         }
 
         .modal.active {
             display: flex;
-            opacity: 1; /* Make modal visible */
+            opacity: 1;
+            transform: scale(1.05); /* Slight zoom-in effect when opened */
         }
 
         .modal-content {
-            background-color: #1F2937; /* Tailwind's gray-800 */
+            background-color: #111827;
             border-radius: 1rem;
-            padding: 2rem;
+            padding: 2.5rem;
             max-width: 600px;
             width: 100%;
-            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3); /* Add shadow for depth */
-            transform: translateY(-20px);
-            transition: transform 0.3s ease-in-out; /* Slide-in animation */
+            box-shadow: 0px 6px 24px rgba(0, 0, 0, 0.4);
+            transform: translateY(-30px);
+            transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
         }
 
         .modal.active .modal-content {
-            transform: translateY(0); /* Animate from top to center */
+            transform: translateY(0);
         }
 
-        /* Enhanced form input styles */
+        /* Form Styling */
         input, textarea, select {
             border: none;
-            background-color: #374151; /* Tailwind's gray-700 */
-            color: #D1D5DB; /* Tailwind's gray-300 */
-            padding: 0.75rem;
+            background-color: #374151;
+            color: #D1D5DB;
+            padding: 0.9rem;
             width: 100%;
             border-radius: 0.5rem;
-            transition: background-color 0.2s ease;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         input:focus, textarea:focus, select:focus {
-            background-color: #4B5563; /* Slightly lighter for focus effect */
+            background-color: #4B5563;
             outline: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        /* Button styling */
-        button {
-            transition: background-color 0.3s ease-in-out, transform 0.2s;
-        }
+        /* Button Styles */
+  button {
+    transition: background-color 0.3s ease-in-out, transform 0.2s, box-shadow 0.3s ease;
+    font-family: 'Roboto', sans-serif;
+    padding: 0.75rem 1.5rem; /* Increase padding for larger buttons */
+    border-radius: 1rem; /* Make buttons more rounded */
+    margin-top: 1.5rem; /* Add more space above the buttons */
+    font-size: 1rem; /* Ensure the text size is appropriate */
+    font-weight: 600; /* Slightly bold for better readability */
+}
+
 
         button:hover {
-            transform: translateY(-2px); /* Subtle hover effect */
+            transform: translateY(-3px);
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        button:focus {
+            outline: none;
+            box-shadow: 0px 4px 12px rgba(34, 197, 94, 0.5); /* Green shadow on focus */
         }
 
         .bg-green-600:hover {
-            background-color: #16A34A; /* Brighter green on hover */
+            background-color: #16A34A;
         }
 
         .bg-red-600:hover {
-            background-color: #DC2626; /* Brighter red on hover */
+            background-color: #DC2626;
+        }
+
+        /* Typography Enhancements */
+        h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.25rem;
+            letter-spacing: -0.05rem;
+        }
+
+        label {
+            font-family: 'Roboto', sans-serif;
+            font-size: 0.875rem;
+            color: #9CA3AF; /* Light gray for better readability */
+        }
+
+        /* Modal shadow hover effect */
+        .modal-content:hover {
+            box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.3);
         }
     </style>
 </head>
@@ -83,74 +117,54 @@
 
 <!-- Main Bet Page Content -->
 
-
 <!-- Modal -->
 <div id="betModal" class="modal modal-overlay">
     <div class="modal-content text-white">
         <h2 class="text-3xl font-bold text-center mb-6">Create a Bet</h2>
-        <form method="POST" action="{% url 'make_bet' %}" class="space-y-4">
+        <form method="POST" action="{% url 'make_bet' %}" class="space-y-6">
             {% csrf_token %}
             <div>
-                <label for="bet_recipient" class="block text-sm font-medium text-gray-300">Bet Recipient
-                    Username:</label>
-                <input type="text" id="bet_recipient" name="bet_recipient"
-                       class="w-full p-3 bg-gray-800 text-white rounded-md" required>
+                <label for="bet_recipient" class="block text-sm font-medium">Bet Recipient Username:</label>
+                <input type="text" id="bet_recipient" name="bet_recipient" class="w-full p-3" required>
             </div>
             <div>
-                <label for="arbitrator" class="block text-sm font-medium text-gray-300">Arbitrator Username (optional,
-                    default 'admin'):</label>
-                <input type="text" id="arbitrator" name="arbitrator"
-                       class="w-full p-3 bg-gray-800 text-white rounded-md">
+                <label for="arbitrator" class="block text-sm font-medium">Arbitrator Username (optional, default 'admin'):</label>
+                <input type="text" id="arbitrator" name="arbitrator" class="w-full p-3">
             </div>
             <div>
-                <label for="amount" class="block text-sm font-medium text-gray-300">Bet Amount:</label>
-                <input type="number" id="amount" name="amount" step="0.01"
-                       class="w-full p-3 bg-gray-800 text-white rounded-md" required>
+                <label for="amount" class="block text-sm font-medium">Bet Amount:</label>
+                <input type="number" id="amount" name="amount" step="0.01" class="w-full p-3" required>
             </div>
             <div>
-                <label for="currency" class="block text-sm font-medium text-gray-300">Currency:</label>
-                <select id="currency" name="currency" class="w-full p-3 bg-gray-800 text-white rounded-md" required>
+                <label for="currency" class="block text-sm font-medium">Currency:</label>
+                <select id="currency" name="currency" class="w-full p-3" required>
                     <option value="USD">USD</option>
-                    <option value="INR">INR</option>
                 </select>
             </div>
             <div>
-                <label for="terms" class="block text-sm font-medium text-gray-300">Terms of the bet :</label>
-                <textarea id="terms" name="terms" class="w-full p-3 bg-gray-800 text-white rounded-md"
-                          rows="3"></textarea>
+                <label for="terms" class="block text-sm font-medium">Terms of the bet:</label>
+                <textarea id="terms" name="terms" class="w-full p-3" rows="3"></textarea>
             </div>
-            <div class="flex justify-between items-center pt-4">
-                <button type="submit" class="bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-6 rounded-lg">
-                    Submit Bet
-                </button>
-                <button type="button" class="bg-red-600 hover:bg-red-500 text-white font-bold py-3 px-6 rounded-lg"
-                        onclick="closeBetModal()">Cancel
-                </button>
-            </div>
+<div class="flex justify-between items-center pt-4">
+    <button type="submit" class="bg-green-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-500">Submit Bet</button>
+    <button type="button" class="bg-red-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-red-500" onclick="closeBetModal()">Cancel</button>
+</div>
+
         </form>
+        <div class="alert">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
     </div>
 </div>
 
-<!-- JavaScript for modal control -->
 <script>
     function openBetModal() {
         document.getElementById('betModal').classList.add('active');
     }
 
-    function closeBetModal() {
-        document.getElementById('betModal').classList.remove('active');
-    }
-
-    window.addEventListener('click', function (event) {
-        const modal = document.getElementById('betModal');
-        if (event.target === modal) {
-            closeBetModal();
-        }
-    });
-
-    // Open the modal automatically when the page loads
     window.addEventListener('DOMContentLoaded', openBetModal);
 </script>
-
 </body>
 </html>

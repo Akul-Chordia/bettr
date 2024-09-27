@@ -226,7 +226,7 @@
         "Bet Smart, Win Big – Your Future Awaits!"
     </h1>
     <p class="text-lg text-gray-600 mb-8 text-center max-w-2xl">
-        Join the action and make your predictions count. Place your bets now and see how luck favors the bold!
+        make bets between your friend uwu abc def ghi jhk somehting blah blah blah!
     </p>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 max-w-4xl mx-auto">
         <div class="bg-gray-800 p-8 rounded text-white" style="box-shadow: 0 4px 20px rgba(44, 63, 79, 0.5);"> <!-- Custom shadow color -->
@@ -248,50 +248,40 @@
 
 
 
-<!-- Notification Modal -->
-<div id="notifModal" class="modal {% if notifications %}active{% endif %}">
-    <div class="modal-content">
+<div id="notifModal" class="modal {% if notifications %} active {% endif %}">
+    <div class="modal-content" style="background-color: #111827;">
         <button class="close-button" onclick="closeNotifModal()">&times;</button>
         <div class="modal-header">
-            <h2>Notifications</h2>
+            <h2 class="text-white">Notifications</h2>
         </div>
         <div class="modal-body scrollable">
             {% if notifications %}
                 {% for notification in notifications %}
-                    <div class="notification">
+                    <div class="notification text-white">
                         {% if notification.notification_type == 'bet_invite' %}
                             {% with notification.bet as bet %}
-                                <p>{{ bet.bet_maker.username }} bet you {{ bet.amount }}{{ bet.currency }}
-                                    for {{ bet.terms }}</p>
+                                <p>{{ bet.bet_maker.username }} bet you {{ bet.amount }}{{ bet.currency }} for {{ bet.terms }}</p>
                                 <form method="POST" action="{% url 'validate_bet' %}">
                                     {% csrf_token %}
                                     <input type="hidden" name="bet" value="{{ bet.id }}"/>
                                     <input type="hidden" name="notification_id" value="{{ notification.id }}"/>
                                     <div class="button-container">
-                                        <button type="submit" name="outcome" value="1"
-                                                class="submit-button accept-button">Accept
-                                        </button>
-                                        <button type="submit" name="outcome" value="0"
-                                                class="submit-button decline-button">Decline
-                                        </button>
+                                        <button type="submit" name="outcome" value="1" class="submit-button
+                                        accept-button ">Accept</button>
+                                        <button type="submit" name="outcome" value="0" class="submit-button decline-button">Decline</button>
                                     </div>
                                 </form>
                             {% endwith %}
                         {% elif notification.notification_type == 'claim_verification' %}
                             {% with notification.bet as bet %}
-                                <p>{{ bet.bet_maker.username }} claimed {{ bet.amount }} {{ bet.currency }}
-                                    for {{ bet.terms }}</p>
+                                <p>{{ bet.bet_maker.username }} claimed {{ bet.amount }} {{ bet.currency }} for {{ bet.terms }}</p>
                                 <form method="POST" action="{% url 'claim_verification' %}">
                                     {% csrf_token %}
                                     <input type="hidden" name="bet" value="{{ bet.id }}"/>
                                     <input type="hidden" name="notification_id" value="{{ notification.id }}"/>
                                     <div class="button-container">
-                                        <button type="submit" name="outcome" value="1"
-                                                class="submit-button accept-button">Accept
-                                        </button>
-                                        <button type="submit" name="outcome" value="0"
-                                                class="submit-button decline-button">Dispute
-                                        </button>
+                                        <button type="submit" name="outcome" value="1" class="submit-button accept-button">Accept</button>
+                                        <button type="submit" name="outcome" value="0" class="submit-button decline-button">Dispute</button>
                                     </div>
                                 </form>
                             {% endwith %}
@@ -303,15 +293,9 @@
                                     <input type="hidden" name="bet" value="{{ bet.id }}"/>
                                     <input type="hidden" name="notification_id" value="{{ notification.id }}"/>
                                     <div class="button-container">
-                                        <button type="submit" name="outcome" value="-1"
-                                                class="submit-button accept-button">Bet maker wins
-                                        </button>
-                                        <button type="submit" name="outcome" value="0"
-                                                class="submit-button accept-button">Void Bet
-                                        </button>
-                                        <button type="submit" name="outcome" value="1"
-                                                class="submit-button decline-button">Bet receiver wins
-                                        </button>
+                                        <button type="submit" name="outcome" value="-1" class="submit-button accept-button">Bet maker wins</button>
+                                        <button type="submit" name="outcome" value="0" class="submit-button accept-button">Void Bet</button>
+                                        <button type="submit" name="outcome" value="1" class="submit-button decline-button">Bet receiver wins</button>
                                     </div>
                                 </form>
                             {% endwith %}
@@ -319,11 +303,12 @@
                     </div>
                 {% endfor %}
             {% else %}
-                <p>No new notifications.</p>
+                <p class="text-white">No new notifications.</p>
             {% endif %}
         </div>
     </div>
 </div>
+
 
 
 <!-- Login Modal -->
