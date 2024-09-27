@@ -729,30 +729,7 @@ video {
     outline-style: solid;
 }
 
-/* Modal styles */
-.modal {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90%;
-    max-width: 600px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-}
 
-.modal.active {
-    display: block;
-}
-
-.modal-content {
-    padding: 20px;
-    max-height: 80vh; /* Limit height */
-    overflow-y: auto; /* Enable vertical scroll */
-}
 
 
 

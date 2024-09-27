@@ -8,16 +8,20 @@
     <link href="{% static 'css/output.css' %}" rel="stylesheet">
     <style>
         /* Advanced Modal Styles */
-        .modal {
-            position: fixed;
-            inset: 0;
-            background-color: rgba(0, 0, 0, 0.6); /* Dark transparent overlay */
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 50;
-            transition: opacity 0.4s ease;
-        }
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.4); /* Black background with opacity */
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
 
         .modal.active {
             display: flex;
@@ -120,23 +124,44 @@
             }
         }
 
-        /* Dropdown Styles */
-        .dropdown-menu {
-            position: absolute;
-            right: 0;
-            margin-top: 10px;
-            background-color: #1F2937; /* Tailwind's gray-800 */
-            border-radius: 0.5rem;
-            width: 200px;
-            visibility: hidden;
-            opacity: 0;
-            transition: visibility 0s, opacity 0.3s ease-in-out;
-        }
+/* Dropdown Styles */
+.dropdown-menu {
+    position: absolute;
+    right: 0;
+    margin-top: 10px;
+    background-color: #1F2937; /* Tailwind's gray-800 */
+    border-radius: 0.5rem;
+    width: 200px;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out, visibility 0s 0.3s; /* Faster show transition and delay visibility hide */
+}
 
-        .dropdown-menu.show {
-            visibility: visible;
-            opacity: 1;
-        }
+/* Show the dropdown on hover */
+.relative:hover .dropdown-menu {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out, visibility 0s; /* Faster hide transition with no delay */
+}
+
+/* Dropdown content hover effects */
+.dropdown-menu a {
+    display: block;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Faster hover effect */
+}
+
+/* Hover effect for dropdown content */
+.dropdown-menu a:hover {
+    background-color: #3B82F6; /* Tailwind's blue-500 */
+    color: white; /* Ensure text stays white */
+    border-radius: 0.25rem; /* Optional: round the edges when hovering */
+}
+
+
+
 
         .scrollable {
             max-height: 30vh;
@@ -151,7 +176,7 @@
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 15px;
-            background-color: royalblue;
+            background-color: #1F2937;
             width: 90%;
             text-align: center;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -189,19 +214,39 @@
             font-weight: bold;
         }
 
-        .accept-button {
-            background-color: #4CAF50;
-            color: white;
-        }
+.button-container {
+    display: flex; /* Use flexbox to align buttons horizontally */
+    gap: 1rem; /* Add space between buttons */
+}
 
-        .decline-button {
-            background-color: #f44336;
-            color: white;
-        }
+.accept-button, .decline-button {
+    padding: 0.25rem 0.5rem; /* Button padding */
+    font-size: 0.875rem; /* Optional: Adjust font size */
+    border-radius: 0.25rem; /* Optional: Round the edges */
+    min-width: 80px; /* Set a minimum width for consistency */
+}
+
+.accept-button {
+    background-color: #2D865B;
+    color: white;
+}
+
+.decline-button {
+    background-color: #914950;
+    color: white;
+}
+.accept-button:hover {
+    background-color: #48B480; /* Change background color on hover */
+}
+
+.decline-button:hover {
+    background-color: #b10d0d; /* Change to a different shade on hover */
+}
+
 
         .modal-header h2 {
             font-size: 24px;
-            color: #333;
+            color: white;
             text-align: center;
         }
 
@@ -223,7 +268,7 @@
 <!-- Catchphrase Section -->
 <div class="flex flex-col items-center mt-16">
     <h1 class="text-4xl font-bold mb-4 text-center text-gray-800">
-        "Bet Smart, Win Big – Your Future Awaits!"
+        "Lorem ipsum dolor sit amet, consectetur!"
     </h1>
     <p class="text-lg text-gray-600 mb-8 text-center max-w-2xl">
         make bets between your friend uwu abc def ghi jhk somehting blah blah blah!

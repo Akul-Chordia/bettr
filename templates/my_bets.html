@@ -15,7 +15,7 @@
             border: 2px solid #ddd;
             padding: 1rem;
             box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
-            z-index: 10;
+            z-index: 1;
             width: 250px;
             max-width: 100%;
             top: 100%; /* Position it below the row */
@@ -42,75 +42,133 @@
             width: 200px;
             visibility: hidden;
             opacity: 0;
-            transition: visibility 0s, opacity 0.3s ease-in-ou50;
-            z-index: 50
+            transition: visibility 0s, opacity 1s ease-in-out;
+            z-index: 50;
         }
 
-        .dropdown-menu.show {
+        /* Show the dropdown on hover */
+        .relative:hover .dropdown-menu {
             visibility: visible;
             opacity: 1;
         }
+
+        /* Smooth transition */
+        .dropdown-menu {
+            transition: opacity 1s ease-in-out;
+        }
+
+        /* Dropdown content hover effects */
+        .dropdown-menu a {
+            display: block;
+            padding: 10px;
+            color: white;
+            text-decoration: none;
+            transition: background-color 1s ease, color 1s ease;
+        }
+
+        /* Hover effect for dropdown content */
+        .dropdown-menu a:hover {
+            background-color: #3B82F6; /* Tailwind's blue-500 */
+            color: white; /* Ensure text stays white */
+            border-radius: 0.25rem; /* Optional: round the edges when hovering */
+        }
+
+        /* Custom Button Styles */
+        .verify-button {
+            background-color: #439cdb; /* Button background color */
+            color: white;
+            padding: 0.25rem 1rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .verify-button:hover {
+            background-color: #3e93cc; /* Button hover color */
+        }
+
+        .bg-custom {
+            background-color: #1f2837;
+        }
+
+        .bg-custom1 {
+            background-color: #111827;
+        }
+
+        .betcha-text,
+        .hamburger-icon {
+            color: white; /* Default color */
+        }
+
+        /* Dark mode styles */
+        .dark-mode .betcha-text,
+        .dark-mode .hamburger-icon {
+            color: black; /* Color when dark mode is toggled */
+        }
+
+        /* Set text colors for the table and headings */
+        .text-white {
+            color: white;
+        }
     </style>
 </head>
-<body class="bg-gray-100 p-8">
+<body class="bg-custom1 p-8 text-white"> <!-- Added text-white class to body -->
 
 {% include 'navbar.html' %}
 <script src="{% static 'js/dropdown.js' %}"></script>
 
-<h2 class="text-2xl font-bold mb-6">My Bets</h2>
+<h2 class="text-2xl font-bold mb-6 text-center">My Bets</h2>
 
 {% if my_bets %}
     <div class="overflow-x-auto">
         <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
-            <thead class="bg-gray-100">
-            <tr>
-                <th class="py-3 px-5 text-left">Status</th>
-                <th class="py-3 px-5 text-left">Opposing Party</th>
-                <th class="py-3 px-5 text-left">Amount</th>
-                <th class="py-3 px-5 text-left">Currency</th>
-                <th class="py-3 px-5 text-left">Placed At</th>
-                <th class="py-3 px-5 text-left">Verify</th>
-            </tr>
+            <thead class="bg-blue-300 text-white"> <!-- Added text-white class -->
+                <tr>
+                    <th class="py-3 px-5 text-left">Status</th>
+                    <th class="py-3 px-5 text-left">Opposing Party</th>
+                    <th class="py-3 px-5 text-left">Amount</th>
+                    <th class="py-3 px-5 text-left">Currency</th>
+                    <th class="py-3 px-5 text-left">Placed At</th>
+                    <th class="py-3 px-5 text-left">Verify</th>
+                </tr>
             </thead>
             <tbody>
-            {% for bet in my_bets %}
-                <tr class="row-container bg-white border-b hover:bg-gray-50 relative">
-                    <td class="py-3 px-5">{{ bet.bet_active }}</td>
-                    <td class="py-3 px-5">
-                        {% if bet.bet_maker == request.user %}
-                            {{ bet.bet_recipient.username }}
-                        {% else %}
-                            {{ bet.bet_maker.username }}
-                        {% endif %}
-                    </td>
-                    <td class="py-3 px-5">{{ bet.amount }}</td>
-                    <td class="py-3 px-5">{{ bet.currency }}</td>
-                    <td class="py-3 px-5">{{ bet.placed_at }}</td>
-                    <td class="py-3 px-5">
-                        {% if not bet.verified_0 or not bet.verified_1 %}
-                            <form method="POST" action="{% url 'claim_bet' %}">
+                {% for bet in my_bets %}
+                    <tr class="row-container bg-custom border-b hover:bg-relative text-white"> <!-- Added text-white class -->
+                        <td class="py-3 px-5">{{ bet.bet_active }}</td>
+                        <td class="py-3 px-5">
+                            {% if bet.bet_maker == request.user %}
+                                {{ bet.bet_recipient.username }}
+                            {% else %}
+                                {{ bet.bet_maker.username }}
+                            {% endif %}
+                        </td>
+                        <td class="py-3 px-5">{{ bet.amount }}</td>
+                        <td class="py-3 px-5">{{ bet.currency }}</td>
+                        <td class="py-3 px-5">{{ bet.placed_at }}</td>
+                        <td class="py-3 px-5">
+                            {% if not bet.verified_0 or not bet.verified_1 %}
+                                <form method="POST" action="{% url 'claim_bet' %}">
                                     {% csrf_token %}
                                     <input type="hidden" name="bet" value="{{ bet.id }}"/>
-                                    <button type="submit" name="claim_bet" class="bg-blue-500 text-white px-4 py-1
-                                        rounded-lg">Verify</button>
+                                    <button type="submit" name="claim_bet" class="verify-button">Verify</button>
                                 </form>
-                        {% else %}
-                            Verified
-                        {% endif %}
-                    </td>
+                            {% else %}
+                                Verified
+                            {% endif %}
+                        </td>
 
-                    <!-- Popup div for displaying terms -->
-                    <div class="popup">
-                        <strong>Terms and Conditions:</strong>
-                        <p>{{ bet.terms }}</p>
-                    </div>
-                </tr>
-            {% endfor %}
+                        <!-- Popup div for displaying terms -->
+                        <div class="popup">
+                            <strong>Terms and Conditions:</strong>
+                            <p>{{ bet.terms }}</p>
+                        </div>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
 {% else %}
-    <p class="text-gray-600">You have no bets.</p>
+    <p class="text-gray-600">You have no bets.</p> <!-- Change this color if needed -->
 {% endif %}
 
 </body>

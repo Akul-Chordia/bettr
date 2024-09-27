@@ -40,7 +40,9 @@ urlpatterns = [
     path('validate_bet/',views.validate_bet,name='validate_bet'),
     path('claim_verification/',views.claim_dispute,name='claim_verification'),
     path('arbitration_request/',views.arbitrator_rule,name='arbitration_request'),
-    path('claim_bet/' , views.claim_bet , name='claim_bet')
+    path('claim_bet/' , views.claim_bet , name='claim_bet'),
+    path('add_money/' , views.add_money , name='add_money'),
+    path('withdraw_money/' , views.withdraw_money , name='withdraw_money')
 
 ]
 
