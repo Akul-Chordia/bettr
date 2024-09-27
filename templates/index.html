@@ -175,37 +175,96 @@
 
 
     <!-- Catchphrase Section -->
-    <div class="flex flex-col items-center mt-16">
-        <h1 class="text-4xl font-bold mb-4">CATCHY CATCH PHRASE</h1>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 max-w-4xl mx-auto">
-            <div class="bg-gray-800 p-8 rounded">Info about website</div>
-            <div class="bg-gray-800 p-8 rounded">Info about website</div>
-            <div class="bg-gray-800 p-8 rounded">Info about website</div>
+ <div class="flex flex-col items-center mt-16">
+    <h1 class="text-4xl font-bold mb-4 text-center text-gray-800">
+        "Bet Smart, Win Big – Your Future Awaits!"
+    </h1>
+    <p class="text-lg text-gray-600 mb-8 text-center max-w-2xl">
+        Join the action and make your predictions count. Place your bets now and see how luck favors the bold!
+    </p>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 max-w-4xl mx-auto">
+        <div class="bg-gray-800 p-8 rounded text-white shadow-lg">
+            <h2 class="text-2xl font-semibold">Expert Tips</h2>
+            <p>Get insights from seasoned players to make informed bets.</p>
+        </div>
+        <div class="bg-gray-800 p-8 rounded text-white shadow-lg">
+            <h2 class="text-2xl font-semibold">Live Updates</h2>
+            <p>Stay updated with real-time odds and game changes.</p>
+        </div>
+        <div class="bg-gray-800 p-8 rounded text-white shadow-lg">
+            <h2 class="text-2xl font-semibold">Community Forum</h2>
+            <p>Connect with other bettors to share strategies and experiences.</p>
         </div>
     </div>
 
-    <!-- Notification Modal -->
-    <div id="notifModal" class="modal {% if notifications %}active{% endif %}">
+        Place a Bet
+    </a>
+</div>
+
+
+<!-- Notification Modal -->
+<div id="notifModal" class="modal {% if notifications %}active{% endif %}">
     <div class="modal-content">
         <button class="close-button" onclick="closeNotifModal()">&times;</button>
         <div class="modal-header">
             <h2>Notifications</h2>
         </div>
-        <div class="modal-body">
+        <div class="modal-body scrollable">
             {% if notifications %}
-                <ul>
-                    {% for notification in notifications %}
-                        {%if (notification.notification_type === 'bet_invite')%}
-                        <li>{{ notification.bet_id }}</li>
-
-                    {% endfor %}
-                </ul>
+                {% for notification in notifications %}
+                    <div class="notification">
+                        {% if notification.notification_type == 'bet_invite' %}
+                            {% with notification.bet as bet %}
+                                <p>{{ bet.bet_maker.username }} bet you {{ bet.amount }}{{ bet.currency }} for {{ bet.terms }}</p>
+                                <form method="POST" action="{% url 'validate_bet' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="bet" value="{{ bet.id }}" />
+                                    <input type="hidden" name="notification_id" value="{{ notification.id }}" />
+                                    <div class="button-container">
+                                        <button type="submit" name="outcome" value="1" class="submit-button accept-button">Accept</button>
+                                        <button type="submit" name="outcome" value="0" class="submit-button decline-button">Decline</button>
+                                    </div>
+                                </form>
+                            {% endwith %}
+                        {% elif notification.notification_type == 'claim_verification' %}
+                            {% with notification.bet as bet %}
+                                <p>{{ bet.bet_maker.username }} claimed {{ bet.amount }} {{ bet.currency }} for {{ bet.terms }}</p>
+                                <form method="POST" action="{% url 'claim_verification' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="bet" value="{{ bet.id }}" />
+                                    <input type="hidden" name="notification_id" value="{{ notification.id }}" />
+                                    <div class="button-container">
+                                        <button type="submit" name="outcome" value="1" class="submit-button accept-button">Accept</button>
+                                        <button type="submit" name="outcome" value="0" class="submit-button decline-button">Dispute</button>
+                                    </div>
+                                </form>
+                            {% endwith %}
+                        {% elif notification.notification_type == 'arbitration_request' %}
+                            {% with notification.bet as bet %}
+                                <p>Dispute on: {{ bet.terms }}</p>
+                                <form method="POST" action="{% url 'arbitration_request' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="bet" value="{{ bet.id }}" />
+                                    <input type="hidden" name="notification_id" value="{{ notification.id }}" />
+                                    <div class="button-container">
+                                        <button type="submit" name="outcome" value="-1" class="submit-button accept-button">Bet maker wins</button>
+                                        <button type="submit" name="outcome" value="0" class="submit-button accept-button">Void Bet</button>
+                                        <button type="submit" name="outcome" value="1" class="submit-button decline-button">Bet receiver wins</button>
+                                    </div>
+                                </form>
+                            {% endwith %}
+                        {% endif %}
+                    </div>
+                {% endfor %}
             {% else %}
                 <p>No new notifications.</p>
             {% endif %}
         </div>
     </div>
 </div>
+
+
+
 
 
     <!-- Login Modal -->

@@ -4,6 +4,7 @@ from django.db import models
 class UserWallet(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     wallet_balance = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
+    on_hold_balance = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
 
     def __str__(self):
         return self.user.username
@@ -14,7 +15,7 @@ class Transaction(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     bet = models.ForeignKey('Bet', on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=20, choices=[('pending', 'Pending'), ('completed', 'Completed')])
+    status = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.user_from} -> {self.user_to}: {self.amount} (Bet ID: {self.bet.id})"
@@ -29,8 +30,6 @@ class Bet(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     currency = models.CharField(max_length=3, choices=[('USD', 'USD'), ('INR','INR')])
     terms = models.TextField(default="terms and conditions")
-    verified_0 = models.BooleanField(default=False)
-    verified_1 = models.BooleanField(default=False)
     settled = models.BooleanField(default=False)
     placed_at = models.DateTimeField(auto_now_add=True)
     settled_at = models.DateTimeField(null=True, blank=True)
@@ -53,11 +52,3 @@ class Notification(models.Model):
 
     def __str__(self):
         return f"{self.user_to.username} - {self.notification_type}"
-
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    dob = models.DateField(null=True, blank=True)
-
-    def __str__(self):
-        return f'{self.user.username} Profile'
