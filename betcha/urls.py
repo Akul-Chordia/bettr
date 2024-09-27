@@ -37,8 +37,9 @@ urlpatterns = [
     path('wallet/' , views.wallet , name='wallet') ,
     path('my-bets/', views.my_bets_view, name='my_bets'),
     path('profile/' , views.profile_view , name='profile') ,
-
-
+    path('validate_bet/',views.validate_bet,name='validate_bet'),
+    path('claim_verification/',views.claim_dispute,name='claim_verification'),
+    path('arbitration_request/',views.arbitrator_rule,name='arbitration_request')
 ]
 
 # Serve static files during development

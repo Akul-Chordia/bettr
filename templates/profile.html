@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +8,8 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
+{% include 'navbar.html' %}
+
     <div class="max-w-4xl mx-auto mt-10">
         <h1 class="text-4xl font-semibold text-gray-800">Profile</h1>
 
@@ -34,5 +37,25 @@
             <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Save Changes</button>
         </form>
     </div>
+
+<style>
+        .dropdown-menu {
+            position: absolute;
+            right: 0;
+            margin-top: 10px;
+            background-color: #1F2937; /* Tailwind's gray-800 */
+            border-radius: 0.5rem;
+            width: 200px;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.3s ease-in-out;
+        }
+
+        .dropdown-menu.show {
+            visibility: visible;
+            opacity: 1;
+        }</style>
+
+<script src="{% static 'js/dropdown.js' %}"></script>
 </body>
 </html>

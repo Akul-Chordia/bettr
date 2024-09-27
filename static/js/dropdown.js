@@ -95,13 +95,15 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+// Close Notification Modal
+function closeNotifModal() {
+    const modal = document.getElementById('notifModal');
+    modal.classList.remove('active');
+}
+
+// Optional: If you want to open the modal when there's a new notification, use this:
 function openNotifModal() {
     const modal = document.getElementById('notifModal');
     modal.classList.add('active');
 }
 
-// Close the notif modal
-function closeNotifModal() {
-    const modal = document.getElementById('notifModal');
-    modal.classList.remove('active'); // Hide the modal
-}
