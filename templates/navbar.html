@@ -6,8 +6,12 @@
         {% if user.is_authenticated %}
             <div class="text-white">Welcome, {{ user.username }}!</div>
         {% else %}
-            <button onclick="openLoginModal()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded">Login</button>
-            <button onclick="openSignupModal()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded">Sign Up</button>
+            <button onclick="openLoginModal()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded">
+                Login
+            </button>
+            <button onclick="openSignupModal()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded">Sign
+                Up
+            </button>
         {% endif %}
         <div class="relative">
             <div class="text-3xl cursor-pointer" onclick="toggleDropdown()">☰</div> <!-- Hamburger Menu -->
@@ -17,10 +21,16 @@
                     <a href="{% url 'profile' %}" class="block px-4 py-2 text-left w-full hover:bg-gray-700">Profile</a>
                     <a href="{% url 'my_bets' %}" class="block px-4 py-2 text-left w-full hover:bg-gray-700">My Bets</a>
                     <a href="{% url 'logout' %}" class="block px-4 py-2 text-left w-full hover:bg-gray-700">Logout</a>
-                    <button id="toggleDarkMode" class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded">Toggle Dark Mode</button>
+                    <button id="toggleDarkMode" class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded">
+                        Toggle Dark Mode
+                    </button>
                 {% else %}
-                    <button class="block px-4 py-2 text-left w-full hover:bg-gray-700" onclick="openLoginModal()">Login</button>
-                    <button class="block px-4 py-2 text-left w-full hover:bg-gray-700" onclick="openSignupModal()">Sign Up</button>
+                    <button class="block px-4 py-2 text-left w-full hover:bg-gray-700" onclick="openLoginModal()">
+                        Login
+                    </button>
+                    <button class="block px-4 py-2 text-left w-full hover:bg-gray-700" onclick="openSignupModal()">Sign
+                        Up
+                    </button>
                 {% endif %}
             </div>
         </div>

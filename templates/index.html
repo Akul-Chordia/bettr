@@ -137,6 +137,7 @@
             visibility: visible;
             opacity: 1;
         }
+
         .scrollable {
             max-height: 30vh;
             overflow-y: auto;
@@ -219,8 +220,8 @@
 
 {% include 'navbar.html' %}
 
-    <!-- Catchphrase Section -->
- <div class="flex flex-col items-center mt-16">
+<!-- Catchphrase Section -->
+<div class="flex flex-col items-center mt-16">
     <h1 class="text-4xl font-bold mb-4 text-center text-gray-800">
         "Bet Smart, Win Big – Your Future Awaits!"
     </h1>
@@ -228,23 +229,23 @@
         Join the action and make your predictions count. Place your bets now and see how luck favors the bold!
     </p>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 max-w-4xl mx-auto">
-        <div class="bg-gray-800 p-8 rounded text-white shadow-lg">
+        <div class="bg-gray-800 p-8 rounded text-white" style="box-shadow: 0 4px 20px rgba(44, 63, 79, 0.5);"> <!-- Custom shadow color -->
             <h2 class="text-2xl font-semibold">Expert Tips</h2>
             <p>Get insights from seasoned players to make informed bets.</p>
         </div>
-        <div class="bg-gray-800 p-8 rounded text-white shadow-lg">
+        <div class="bg-gray-800 p-8 rounded text-white" style="box-shadow: 0 4px 20px rgba(44, 63, 79, 0.5);"> <!-- Custom shadow color -->
             <h2 class="text-2xl font-semibold">Live Updates</h2>
             <p>Stay updated with real-time odds and game changes.</p>
         </div>
-        <div class="bg-gray-800 p-8 rounded text-white shadow-lg">
+        <div class="bg-gray-800 p-8 rounded text-white" style="box-shadow: 0 4px 20px rgba(44, 63, 79, 0.5);"> <!-- Custom shadow color -->
             <h2 class="text-2xl font-semibold">Community Forum</h2>
             <p>Connect with other bettors to share strategies and experiences.</p>
         </div>
     </div>
 
-        Place a Bet
     </a>
 </div>
+
 
 
 <!-- Notification Modal -->
@@ -260,27 +261,37 @@
                     <div class="notification">
                         {% if notification.notification_type == 'bet_invite' %}
                             {% with notification.bet as bet %}
-                                <p>{{ bet.bet_maker.username }} bet you {{ bet.amount }}{{ bet.currency }} for {{ bet.terms }}</p>
+                                <p>{{ bet.bet_maker.username }} bet you {{ bet.amount }}{{ bet.currency }}
+                                    for {{ bet.terms }}</p>
                                 <form method="POST" action="{% url 'validate_bet' %}">
                                     {% csrf_token %}
-                                    <input type="hidden" name="bet" value="{{ bet.id }}" />
-                                    <input type="hidden" name="notification_id" value="{{ notification.id }}" />
+                                    <input type="hidden" name="bet" value="{{ bet.id }}"/>
+                                    <input type="hidden" name="notification_id" value="{{ notification.id }}"/>
                                     <div class="button-container">
-                                        <button type="submit" name="outcome" value="1" class="submit-button accept-button">Accept</button>
-                                        <button type="submit" name="outcome" value="0" class="submit-button decline-button">Decline</button>
+                                        <button type="submit" name="outcome" value="1"
+                                                class="submit-button accept-button">Accept
+                                        </button>
+                                        <button type="submit" name="outcome" value="0"
+                                                class="submit-button decline-button">Decline
+                                        </button>
                                     </div>
                                 </form>
                             {% endwith %}
                         {% elif notification.notification_type == 'claim_verification' %}
                             {% with notification.bet as bet %}
-                                <p>{{ bet.bet_maker.username }} claimed {{ bet.amount }} {{ bet.currency }} for {{ bet.terms }}</p>
+                                <p>{{ bet.bet_maker.username }} claimed {{ bet.amount }} {{ bet.currency }}
+                                    for {{ bet.terms }}</p>
                                 <form method="POST" action="{% url 'claim_verification' %}">
                                     {% csrf_token %}
-                                    <input type="hidden" name="bet" value="{{ bet.id }}" />
-                                    <input type="hidden" name="notification_id" value="{{ notification.id }}" />
+                                    <input type="hidden" name="bet" value="{{ bet.id }}"/>
+                                    <input type="hidden" name="notification_id" value="{{ notification.id }}"/>
                                     <div class="button-container">
-                                        <button type="submit" name="outcome" value="1" class="submit-button accept-button">Accept</button>
-                                        <button type="submit" name="outcome" value="0" class="submit-button decline-button">Dispute</button>
+                                        <button type="submit" name="outcome" value="1"
+                                                class="submit-button accept-button">Accept
+                                        </button>
+                                        <button type="submit" name="outcome" value="0"
+                                                class="submit-button decline-button">Dispute
+                                        </button>
                                     </div>
                                 </form>
                             {% endwith %}
@@ -289,12 +300,18 @@
                                 <p>Dispute on: {{ bet.terms }}</p>
                                 <form method="POST" action="{% url 'arbitration_request' %}">
                                     {% csrf_token %}
-                                    <input type="hidden" name="bet" value="{{ bet.id }}" />
-                                    <input type="hidden" name="notification_id" value="{{ notification.id }}" />
+                                    <input type="hidden" name="bet" value="{{ bet.id }}"/>
+                                    <input type="hidden" name="notification_id" value="{{ notification.id }}"/>
                                     <div class="button-container">
-                                        <button type="submit" name="outcome" value="-1" class="submit-button accept-button">Bet maker wins</button>
-                                        <button type="submit" name="outcome" value="0" class="submit-button accept-button">Void Bet</button>
-                                        <button type="submit" name="outcome" value="1" class="submit-button decline-button">Bet receiver wins</button>
+                                        <button type="submit" name="outcome" value="-1"
+                                                class="submit-button accept-button">Bet maker wins
+                                        </button>
+                                        <button type="submit" name="outcome" value="0"
+                                                class="submit-button accept-button">Void Bet
+                                        </button>
+                                        <button type="submit" name="outcome" value="1"
+                                                class="submit-button decline-button">Bet receiver wins
+                                        </button>
                                     </div>
                                 </form>
                             {% endwith %}
@@ -309,47 +326,44 @@
 </div>
 
 
-
-
-
-    <!-- Login Modal -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <button class="close-button">&times;</button>
-            <div class="modal-header">
-                <h2>Login</h2>
-            </div>
-            <form method="POST" action="{% url 'login' %}">
-                {% csrf_token %}
-                <input type="text" name="username" placeholder="Username" class="input-field" required />
-                <input type="password" name="password" placeholder="Password" class="input-field" required />
-                <button type="submit" class="submit-button">Login</button>
-            </form>
+<!-- Login Modal -->
+<div id="loginModal" class="modal">
+    <div class="modal-content">
+        <button class="close-button">&times;</button>
+        <div class="modal-header">
+            <h2>Login</h2>
         </div>
+        <form method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Username" class="input-field" required/>
+            <input type="password" name="password" placeholder="Password" class="input-field" required/>
+            <button type="submit" class="submit-button">Login</button>
+        </form>
     </div>
+</div>
 
-    <!-- Sign-Up Modal -->
-    <div id="signupModal" class="modal">
-        <div class="modal-content signup-modal-content">
-            <button class="close-button">&times;</button>
-            <div class="modal-header">
-                <h2>Sign Up</h2>
-            </div>
-            <form method="POST" action="{% url 'signup' %}">
-                {% csrf_token %}
-                <input type="email" name="email" placeholder="Email" class="input-field" required />
-                <input type="text" name="first_name" placeholder="First Name" class="input-field" required />
-                <input type="text" name="last_name" placeholder="Last Name" class="input-field" required />
-                <input type="text" name="dob" placeholder="Date of Birth (DD-MM-YYYY)" class="input-field" required />
-                <input type="text" name="username" placeholder="Username" class="input-field" required />
-                <input type="password" name="password" placeholder="Password" class="input-field" required />
-                <button type="submit" class="submit-button">Sign Up</button>
-            </form>
+<!-- Sign-Up Modal -->
+<div id="signupModal" class="modal">
+    <div class="modal-content signup-modal-content">
+        <button class="close-button">&times;</button>
+        <div class="modal-header">
+            <h2>Sign Up</h2>
         </div>
+        <form method="POST" action="{% url 'signup' %}">
+            {% csrf_token %}
+            <input type="email" name="email" placeholder="Email" class="input-field" required/>
+            <input type="text" name="first_name" placeholder="First Name" class="input-field" required/>
+            <input type="text" name="last_name" placeholder="Last Name" class="input-field" required/>
+            <input type="text" name="dob" placeholder="Date of Birth (DD-MM-YYYY)" class="input-field" required/>
+            <input type="text" name="username" placeholder="Username" class="input-field" required/>
+            <input type="password" name="password" placeholder="Password" class="input-field" required/>
+            <button type="submit" class="submit-button">Sign Up</button>
+        </form>
     </div>
+</div>
 
-    <!-- Linking to dropdown.js -->
-    <script src="{% static 'js/dropdown.js' %}"></script>
+<!-- Linking to dropdown.js -->
+<script src="{% static 'js/dropdown.js' %}"></script>
 
 </body>
 </html>

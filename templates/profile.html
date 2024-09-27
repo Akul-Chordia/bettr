@@ -6,55 +6,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-gray-100">
-{% include 'navbar.html' %}
-
-    <div class="max-w-4xl mx-auto mt-10">
-        <h1 class="text-4xl font-semibold text-gray-800">Profile</h1>
-
-
-
-
-        <form method="POST" class="mt-8 bg-white p-6 rounded-lg shadow-md">
-            {% csrf_token %}
-            <div class="mb-4">
-                <label for="username" class="block text-gray-700">Username</label>
-                <input type="text" id="username" name="username" value="{{ user.username }}" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-            </div>
-            <div class="mb-4">
-                <label for="email" class="block text-gray-700">Email</label>
-                <input type="email" id="email" name="email" value="{{ user.email }}" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-            </div>
-            <div class="mb-4">
-                <label for="first_name" class="block text-gray-700">First Name</label>
-                <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-            </div>
-            <div class="mb-4">
-                <label for="last_name" class="block text-gray-700">Last Name</label>
-                <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-            </div>
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Save Changes</button>
-        </form>
-    </div>
-
-<style>
-        .dropdown-menu {
-            position: absolute;
-            right: 0;
-            margin-top: 10px;
-            background-color: #1F2937; /* Tailwind's gray-800 */
-            border-radius: 0.5rem;
-            width: 200px;
-            visibility: hidden;
-            opacity: 0;
-            transition: visibility 0s, opacity 0.3s ease-in-out;
+    <style>
+        body {
+            background-color: #1d2b39; /* Background color of the page */
         }
 
-        .dropdown-menu.show {
-            visibility: visible;
-            opacity: 1;
-        }</style>
+        .form-container {
+            background-color: #2C3E50; /* Form background color */
+        }
+    </style>
+</head>
+<body>
+{% include 'navbar.html' %}
+
+<div class="max-w-4xl mx-auto mt-10">
+    <h1 class="text-4xl font-semibold text-gray-800">Profile</h1>
+
+    <form method="POST" class="mt-8 p-6 rounded-lg shadow-md form-container">
+        {% csrf_token %}
+        <div class="mb-4">
+            <label for="username" class="block text-white">Username</label>
+            <input type="text" id="username" name="username" value="{{ user.username }}"
+                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                   required>
+        </div>
+        <div class="mb-4">
+            <label for="email" class="block text-white">Email</label>
+            <input type="email" id="email" name="email" value="{{ user.email }}"
+                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                   required>
+        </div>
+        <div class="mb-4">
+            <label for="first_name" class="block text-white">First Name</label>
+            <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}"
+                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                   required>
+        </div>
+        <div class="mb-4">
+            <label for="last_name" class="block text-white">Last Name</label>
+            <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}"
+                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                   required>
+        </div>
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Save Changes
+        </button>
+    </form>
+</div>
+
+<style>
+    .dropdown-menu {
+        position: absolute;
+        right: 0;
+        margin-top: 10px;
+        background-color: #1F2937; /* Tailwind's gray-800 */
+        border-radius: 0.5rem;
+        width: 200px;
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s, opacity 0.3s ease-in-out;
+    }
+
+    .dropdown-menu.show {
+        visibility: visible;
+        opacity: 1;
+    }
+</style>
 
 <script src="{% static 'js/dropdown.js' %}"></script>
 </body>

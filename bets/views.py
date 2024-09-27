@@ -1,13 +1,13 @@
+from datetime import datetime
+
+from django.contrib import messages
 from django.contrib.auth import authenticate , login , logout
 from django.contrib.auth.decorators import login_required
-
-from .models import Bet, Notification, UserWallet, Transaction
-from django.utils import timezone
-from datetime import datetime
 from django.contrib.auth.models import User
-
 from django.shortcuts import render , redirect
-from django.contrib import messages
+from django.utils import timezone
+
+from .models import Bet , Notification , UserWallet , Transaction
 
 
 def index(request):
@@ -127,7 +127,6 @@ def make_bet(request):
             user_wallet.wallet_balance -= amount
             user_wallet.on_hold_balance += amount
 
-
         bet = Bet.objects.create(
             bet_maker=bet_maker ,
             bet_recipient=bet_recipient ,
@@ -142,12 +141,15 @@ def make_bet(request):
         )
         bet.save()
 
-        Notification.objects.create(
+        bet_notification = Notification.objects.create(
             user_to=bet_recipient ,
             notification_type='bet_invite' ,
-            bet=bet ,
+            bet_id=bet.id ,
+            created_at=datetime.now() ,
             is_read=False
         )
+
+        bet_notification.save()
 
         messages.success(request ,
                          f"Bet created between {bet_maker.username} and {bet_recipient.username} for {amount} {currency}.")
@@ -165,7 +167,7 @@ def validate_bet(request):
         bet = Bet.objects.get(id=bet_id)
         user_wallet = UserWallet.objects.filter(user_id=request.user)
         sender_wallet = UserWallet.objects.filter(user_id=bet.bet_maker)
-        notification = Notification.objects.filter(id = notification_id)
+        notification = Notification.objects.filter(id=notification_id)
         if outcome == 1:
             if user_wallet.wallet_balance < bet.amount:
                 messages.error(request , 'Bet amount must be less than than wallet amount.')
@@ -174,7 +176,7 @@ def validate_bet(request):
                 user_wallet.wallet_balance -= bet.amount
                 user_wallet.on_hold_balance += bet.amount
                 user_wallet.save()
-            transfer(bet.bet_maker, 1, bet.amount, bet_id)
+            transfer(bet.bet_maker , 1 , bet.amount , bet_id)
             transfer(bet.bet_recipient , 1 , bet.amount , bet_id)
             bet.bet_active = True
             bet.save()
@@ -188,6 +190,7 @@ def validate_bet(request):
             notification.is_read = True
             notification.save()
     return 0
+
 
 def claim_dispute(request):
     if request.method == 'POST':
@@ -209,20 +212,21 @@ def claim_dispute(request):
             else:
                 messages.error('Something went wrong')
                 return render(request , 'index.html')
-            transfer(1, bet.winner, bet.amount*2, bet_id)
+            transfer(1 , bet.winner , bet.amount * 2 , bet_id)
 
         elif outcome == 0:
             bet_notification = Notification.objects.create(
-                                user_to_id= bet.arbitrator,
-                                notification_type='arbitration_request',
-                                user_from_id = request.user,
-                                bet_id = bet.id,
-                                created_at = datetime.now(),
-                                is_read= False
-                                )
+                user_to_id=bet.arbitrator ,
+                notification_type='arbitration_request' ,
+                user_from_id=request.user ,
+                bet_id=bet.id ,
+                created_at=datetime.now() ,
+                is_read=False
+            )
             bet_notification.save()
 
     return 0
+
 
 def arbitrator_rule(request):
     if request.method == 'POST':
@@ -231,15 +235,53 @@ def arbitrator_rule(request):
         notification_id = request.POST.get('notification_id')
         bet = Bet.objects.get(id=bet_id)
         notification = Notification.objects.filter(id=notification_id)
+        notification.is_read = True
+        notification.save()
 
-
+        if outcome == -1:
+            bet.winner = bet.bet_maker
+            bet.save()
+            transfer(1 , bet.winner , bet.amount * 2 , bet_id)
+        elif outcome == 0:
+            transfer(1 , bet.bet_maker , bet.amount , bet_id)
+            transfer(1 , bet.bet_recipient , bet.amount , bet_id)
+            bet.delete()
+        elif outcome == 1:
+            bet.winner = bet.bet_recipient
+            bet.save()
+            transfer(1 , bet.winner , bet.amount * 2 , bet_id)
     return 0
+
 
 def add_money(request):
+    if request.method == 'POST':
+        amount = request.POST.get('amount')
+        user_wallet = UserWallet.objects.filter(user_id=request.user)
+        user_wallet.wallet_balance += amount
     return 0
 
+def claim_bet(request):
+    if request.method == 'POST':
+        bet_id = request.POST.get('bet')
+        bet = Bet.objects.get(id=bet_id)
 
-def transfer(sender_id, receiver_id, amount, bet_id):
+        if request.user == bet.bet_maker:
+            claimer = bet.bet_recipient
+        elif request.user == bet.bet_recipient:
+            claimer = bet.bet_maker
+
+        bet_notification = Notification.objects.create(
+            user_to = claimer ,
+            notification_type='claim_verification' ,
+            bet_id=bet.id ,
+            created_at=datetime.now() ,
+            is_read=False
+        )
+
+        bet_notification.save()
+    return 0
+
+def transfer(sender_id , receiver_id , amount , bet_id):
     sender_waller = UserWallet.objects.filter(user_id=sender_id)
     receiver_wallet = UserWallet.objects.filter(user_id=receiver_id)
 
@@ -248,7 +290,7 @@ def transfer(sender_id, receiver_id, amount, bet_id):
         user_to_id=receiver_id ,
         timestamp=datetime.now() ,
         amount=amount ,
-        bet_id=bet_id,
+        bet_id=bet_id ,
         status=False
     )
     transaction.save()
@@ -262,6 +304,7 @@ def transfer(sender_id, receiver_id, amount, bet_id):
     except:
         messages.error('TRANSACTION FAILED')
     return 0
+
 
 @login_required
 def profile_view(request):
@@ -307,4 +350,4 @@ def wallet(request):
 def notification_view(request):
     notifications = Notification.objects.filter(user_to=request.user , is_read=False)
     bets = {notification.bet_id: Bet.objects.get(id=notification.bet_id) for notification in notifications}
-    return render(request , 'index.html' , {'notifications': notifications, 'bets': bets})
+    return render(request , 'index.html' , {'notifications': notifications , 'bets': bets})

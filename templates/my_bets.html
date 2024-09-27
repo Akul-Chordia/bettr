@@ -60,9 +60,9 @@
 <h2 class="text-2xl font-bold mb-6">My Bets</h2>
 
 {% if my_bets %}
-<div class="overflow-x-auto">
-    <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
-        <thead class="bg-gray-100">
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+            <thead class="bg-gray-100">
             <tr>
                 <th class="py-3 px-5 text-left">Status</th>
                 <th class="py-3 px-5 text-left">Opposing Party</th>
@@ -71,41 +71,46 @@
                 <th class="py-3 px-5 text-left">Placed At</th>
                 <th class="py-3 px-5 text-left">Verify</th>
             </tr>
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
             {% for bet in my_bets %}
-            <tr class="row-container bg-white border-b hover:bg-gray-50 relative">
-                <td class="py-3 px-5">{{ bet.bet_active }}</td>
-                <td class="py-3 px-5">
-                    {% if bet.bet_maker == request.user %}
-                        {{ bet.bet_recipient.username }}
-                    {% else %}
-                        {{ bet.bet_maker.username }}
-                    {% endif %}
-                </td>
-                <td class="py-3 px-5">{{ bet.amount }}</td>
-                <td class="py-3 px-5">{{ bet.currency }}</td>
-                <td class="py-3 px-5">{{ bet.placed_at }}</td>
-                <td class="py-3 px-5">
-                    {% if not bet.verified_0 or not bet.verified_1 %}
-                        <button class="bg-blue-500 text-white px-4 py-1 rounded-lg">Verify</button>
-                    {% else %}
-                        Verified
-                    {% endif %}
-                </td>
+                <tr class="row-container bg-white border-b hover:bg-gray-50 relative">
+                    <td class="py-3 px-5">{{ bet.bet_active }}</td>
+                    <td class="py-3 px-5">
+                        {% if bet.bet_maker == request.user %}
+                            {{ bet.bet_recipient.username }}
+                        {% else %}
+                            {{ bet.bet_maker.username }}
+                        {% endif %}
+                    </td>
+                    <td class="py-3 px-5">{{ bet.amount }}</td>
+                    <td class="py-3 px-5">{{ bet.currency }}</td>
+                    <td class="py-3 px-5">{{ bet.placed_at }}</td>
+                    <td class="py-3 px-5">
+                        {% if not bet.verified_0 or not bet.verified_1 %}
+                            <form method="POST" action="{% url 'claim_bet' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="bet" value="{{ bet.id }}"/>
+                                    <button type="submit" name="claim_bet" class="bg-blue-500 text-white px-4 py-1
+                                        rounded-lg">Verify</button>
+                                </form>
+                        {% else %}
+                            Verified
+                        {% endif %}
+                    </td>
 
-                <!-- Popup div for displaying terms -->
-                <div class="popup">
-                    <strong>Terms and Conditions:</strong>
-                    <p>{{ bet.terms }}</p>
-                </div>
-            </tr>
+                    <!-- Popup div for displaying terms -->
+                    <div class="popup">
+                        <strong>Terms and Conditions:</strong>
+                        <p>{{ bet.terms }}</p>
+                    </div>
+                </tr>
             {% endfor %}
-        </tbody>
-    </table>
-</div>
+            </tbody>
+        </table>
+    </div>
 {% else %}
-<p class="text-gray-600">You have no bets.</p>
+    <p class="text-gray-600">You have no bets.</p>
 {% endif %}
 
 </body>

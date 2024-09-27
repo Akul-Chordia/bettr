@@ -1,4 +1,3 @@
-
 let isDarkMode = false;
 
 // Toggle dropdown menu visibility
@@ -58,7 +57,7 @@ function logout() {
 }
 
 // Dark mode toggle functionality
-document.getElementById('toggleDarkMode').addEventListener('click', function() {
+document.getElementById('toggleDarkMode').addEventListener('click', function () {
     isDarkMode = !isDarkMode;
     document.body.classList.toggle('bg-gray-900', isDarkMode);
     document.body.classList.toggle('text-white', isDarkMode);
@@ -67,7 +66,7 @@ document.getElementById('toggleDarkMode').addEventListener('click', function() {
 });
 
 // Attach event listeners for modal close buttons
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Close login modal button
     const closeLoginButton = document.querySelector('#loginModal .close-button');
     if (closeLoginButton) {
@@ -88,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize dark mode toggle button if it exists
     const darkModeToggle = document.getElementById('darkModeToggle');
     if (darkModeToggle) {
-        darkModeToggle.addEventListener('click', function() {
+        darkModeToggle.addEventListener('click', function () {
             document.body.classList.toggle('dark-mode'); // Implement your dark mode functionality
         });
     }
