@@ -223,7 +223,8 @@
         <!-- Buttons for deposit and withdraw money -->
         <div class="button-group">
             <a href="javascript:void(0)" class="button deposit" onclick="openModal()">Deposit Money</a>
-            <a class="button withdraw">Withdraw Money</a>
+            <a href="javascript:void(0)" class="button withdraw" onclick="openWithdrawModal()">Withdraw Money</a>
+
         </div>
     </div>
 
@@ -262,6 +263,44 @@
         </div>
     </div>
 
+
+      <!-- Withdraw Money Modal -->
+    <div id="withdrawModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeWithdrawModal()">&times;</span>
+            <h2>Withdraw Money</h2>
+
+            <!-- Form to add money -->
+            <form method="POST" action="{% url 'withdraw_money' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="add-amount">Amount to Add</label>
+                    <input type="number" name="amount" id="add-amount" required min="1" step="0.01" placeholder="Enter amount" />
+                </div>
+
+                <div class="form-group">
+                    <label for="card-number">Card Number</label>
+                    <input type="text" name="card_number" id="card-number" required placeholder="1234 5678 9012 3456" />
+                </div>
+
+                <div class="form-group">
+                    <label for="card-expiry">Expiration Date</label>
+                    <input type="text" name="card_expiry" id="card-expiry" required placeholder="MM/YY" />
+                </div>
+
+                <div class="form-group">
+                    <label for="card-cvc">CVC</label>
+                    <input type="text" name="card_cvc" id="card-cvc" required placeholder="123" />
+                </div>
+
+                <button type="submit" class="submit-button">Withdraw Money</button>
+                <div id="payment-errors" role="alert" class="text-red-500 mt-4"></div>
+            </form>
+        </div>
+    </div>
+
+
+<script src="{% static 'js/dropdown.js' %}"></script>
     <script>
         function openModal() {
             document.getElementById('depositModal').style.display = 'block';
@@ -270,6 +309,14 @@
         function closeModal() {
             document.getElementById('depositModal').style.display = 'none';
         }
+
+        function openWithdrawModal() {
+        document.getElementById('withdrawModal').style.display = 'block';
+    }
+
+        function closeWithdrawModal() {
+        document.getElementById('withdrawModal').style.display = 'none';
+    }
     </script>
 </body>
 </html>
