@@ -125,7 +125,7 @@ STATICFILES_DIRS = [
     BASE_DIR / "static" ,
 ]
 
-STRIPE_TEST_PUBLIC_KEY = 'pk_test_51Q3juAH1XCaiLE9lF5AcoguX3t5QTm7AfgCUpVFYaFhpC0Wz0koTfi4WUMcCFj7OgxHjK6FuamnIO9DL75wnvaYc00HuxLSuDL'
-STRIPE_TEST_SECRET_KEY = 'sk_test_51Q3juAH1XCaiLE9lrMm5gnGDe2MIOzs1ZTPOVNGKGsCbcOCHZaAkpEEeTyryhvHA373yajvj8ruRRlKJGlpu0vlE00FVhnos8x'
-EMAIL_USER = 'betcha.donotreply.official@gmail.com'
-APP_PASS = 'ergf prol hdek duhr'
+STRIPE_TEST_PUBLIC_KEY = <your_API_key>
+STRIPE_TEST_SECRET_KEY = <your_API_key>
+EMAIL_USER = <your_API_key>
+APP_PASS = <your_API_key>
