@@ -7,19 +7,22 @@
     <title>Wallet</title>
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
     <style>
+        input::placeholder {
+            color: #1d2b39;
+        }
 
         /* Dropdown Styles */
-.dropdown-menu {
-    position: absolute;
-    right: 0;
-    margin-top: 10px;
-    background-color: #1F2937; /* Tailwind's gray-800 */
-    border-radius: 0.5rem;
-    width: 200px;
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out, visibility 0s 0.3s; /* Faster show transition and delay visibility hide */
-}
+        .dropdown-menu {
+            position: absolute;
+            right: 0;
+            margin-top: 10px;
+            background-color: #2c3f4f; /* Tailwind's gray-800 */
+            border-radius: 0.5rem;
+            width: 200px;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out, visibility 0s 0.3s; /* Faster show transition and delay visibility hide */
+        }
 
         /* Show the dropdown on hover */
         .relative:hover .dropdown-menu {
@@ -37,12 +40,21 @@
             transition: background-color 0.3s ease, color 0.3s ease; /* Faster hover effect */
         }
 
-/* Hover effect for dropdown content */
-.dropdown-menu a:hover {
-    background-color: #425464; /* Tailwind's blue-500 */
-    color: white; /* Ensure text stays white */
-    border-radius: 0.25rem; /* Optional: round the edges when hovering */
-}
+        /* Hover effect for dropdown content */
+        .dropdown-menu a:hover {
+            background-color: #425464; /* Tailwind's blue-500 */
+            color: white; /* Ensure text stays white */
+            border-radius: 0.25rem; /* Optional: round the edges when hovering */
+        }
+
+        .bg-custom {
+            background-color: #2c3f4f;
+        }
+
+        .bg-custom1 {
+            background-color: #1d2b39;
+        }
+
         .betcha-text,
         .hamburger-icon {
             color: white; /* Default color */
@@ -54,10 +66,6 @@
             color: black; /* Color when dark mode is toggled */
         }
 
-        /* Set text colors for the table and headings */
-        .text-white {
-            color: white;
-        }
         /* Container styling */
         .container {
             max-width: 600px;
@@ -65,7 +73,7 @@
             padding: 40px;
             border: 1px solid #ddd;
             border-radius: 12px;
-            background-color: #1F2937;
+            background-color: #2c3f4f;
             box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
             color: #F9FAFB;
         }
@@ -133,11 +141,11 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: #1F2937;
         }
 
         .modal-content {
-            background-color: #1F2937;
+            background-color: #2c3f4f;
             margin: 15% auto;
             padding: 20px;
             border: 1px solid #888;
@@ -147,7 +155,7 @@
         }
 
         .modal h2 {
-            color: #60A5FA;
+            color: #2c3f4f;
             text-align: center;
             margin-bottom: 20px;
         }
@@ -182,7 +190,7 @@
             padding: 12px;
             border: 1px solid #4B5563;
             border-radius: 8px;
-            background-color: #374151;
+            background-color: #2c3f4f;
             color: #F9FAFB;
             transition: border-color 0.3s ease;
         }
@@ -211,7 +219,7 @@
 
     </style>
 </head>
-<body bgcolor="#111827">
+<body bgcolor="#1d2b39">
 {% include 'navbar.html' %}
 <div class="container">
 

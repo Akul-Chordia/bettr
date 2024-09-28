@@ -29,7 +29,7 @@
         }
 
         .modal-content {
-            background-color: #1F2937; /* Tailwind's gray-800 */
+            background-color: #1d2b39; /* Tailwind's gray-800 */
             border-radius: 1rem;
             padding: 2rem;
             width: 100%;
@@ -104,7 +104,7 @@
 
         /* Sign-Up Modal Specific Styles */
         .signup-modal-content {
-            background-color: #1F2937; /* Tailwind's blue-800 */
+            background-color: #1d2b39; /* Tailwind's blue-800 */
         }
 
         .signup-modal-content h2 {
@@ -124,18 +124,18 @@
             }
         }
 
-/* Dropdown Styles */
-.dropdown-menu {
-    position: absolute;
-    right: 0;
-    margin-top: 10px;
-    background-color: #1F2937; /* Tailwind's gray-800 */
-    border-radius: 0.5rem;
-    width: 200px;
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out, visibility 0s 0.3s; /* Faster show transition and delay visibility hide */
-}
+        /* Dropdown Styles */
+        .dropdown-menu {
+            position: absolute;
+            right: 0;
+            margin-top: 10px;
+            background-color: #2c3f4f; /* Tailwind's gray-800 */
+            border-radius: 0.5rem;
+            width: 200px;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out, visibility 0s 0.3s; /* Faster show transition and delay visibility hide */
+        }
 
         /* Show the dropdown on hover */
         .relative:hover .dropdown-menu {
@@ -174,7 +174,7 @@
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 15px;
-            background-color: #1F2937;
+            background-color: #1d2b39;
             width: 90%;
             text-align: center;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -296,21 +296,41 @@
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4); /* Increase shadow on hover */
         }
 
-  .btn-primary:active {
-      transform: scale(0.98); /* Slight shrink when pressed */
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Less shadow when clicked */
-  }
+        .btn-primary:active {
+            transform: scale(0.98); /* Slight shrink when pressed */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Less shadow when clicked */
+        }
+
+        input::placeholder {
+            color: white;
+        }
+
+        .custom-heading {
+            font-size: 1.4rem; /* Adjust to your desired size */
+            /* Add other styles if needed */
+        }
+
+        .custom-heading1 {
+            font-size: 0.6rem; /* Adjust to your desired size */
+            /* Add other styles if needed */
+        }
+        .align-left {
+    display: flex;
+    justify-content: flex-start; /* Align to the left */
+}
+
 
     </style>
 </head>
-<body class="bg-gray-900 text-white">
+<body style="background-color: #1d2b39; color: white;">
 
 {% include 'navbar.html' %}
 
 <!-- Catchphrase Section -->
 <div class="flex flex-col items-center mt-16">
-    <h1 class="text-4xl font-bold mb-4 text-center text-gray-800">
-        "Lorem ipsum dolor sit amet, consectetur!"
+    <h1 class="text-4xl font-bold mb-4 text-center">
+
+        TAILORED BETS FOR EVERYONE (and everything)
     </h1>
     <p class="text-lg text-gray-600 mb-8 text-center max-w-2xl">
         Make safe and secure personalized bets between anyone anywhere
@@ -326,24 +346,25 @@
             <p>Make secure bets with complete strangers, and we'll arbitrate them for you</p>
             <h6 class="text-sm font-thin custom-heading1 "> **at a low 2% cost** </h6>
         </div>
-        <div class="bg-gray-800 p-8 rounded text-white" style="box-shadow: 0 4px 20px rgba(44, 63, 79, 0.5);">
-            <h2 class="text-2xl font-semibold">Community Forum</h2>
-            <p>Connect with other bettors to share strategies and experiences.</p>
+                <div class="p-8 rounded text-white" style="background-color: #ef933e; background-image: url('path/to/your/image.jpg'); background-size: cover; background-position: center; box-shadow: 0 4px 20px rgba(44, 63, 79, 0.5);">
+
+            <h2 class="text-2xl font-bold custom-heading">GET PAID TO CRUSH EGOS</h2>
+            <p>Next time you see a snarky comment, make them put their money where their mouth is.</p>
         </div>
     </div>
 
     <!-- Attractive Button -->
-<div class="mt-8 text-center">
-    <a href="bet" class="btn-primary">
-        Make A Bet
-    </a>
-</div>
-
-
-
-
-
-
+    <div class="mt-8 text-center">
+        {% if user.is_authenticated %}
+            <a href="{% url 'bet' %}" class="btn-primary">
+                Make A Bet
+            </a>
+        {% else %}
+            <button onclick="openLoginModal()" class="btn-primary">
+                Make A Bet
+            </button>
+        {% endif %}
+    </div>
 
 
     <div id="notifModal" class="modal {% if notifications %} active {% endif %}">
