@@ -49,13 +49,6 @@
 
 <style>
 /* Dropdown Styles */
-
-.button-submit{
-    background-color: #439cdb;
-}
-
-
-/* Dropdown Styles */
 .dropdown-menu {
     position: absolute;
     right: 0;
@@ -65,14 +58,14 @@
     width: 200px;
     visibility: hidden;
     opacity: 0;
-    transition: opacity 0.3s ease-in-out, visibility 0s 0.3s; /* Faster show and delayed hide */
+    transition: opacity 0.3s ease-in-out, visibility 0s 0.3s; /* Faster show transition and delay visibility hide */
 }
 
 /* Show the dropdown on hover */
 .relative:hover .dropdown-menu {
     visibility: visible;
     opacity: 1;
-    transition: opacity 0.3s ease-in-out, visibility 0s; /* Remove delay on hover */
+    transition: opacity 0.3s ease-in-out, visibility 0s; /* Faster hide transition with no delay */
 }
 
 /* Dropdown content hover effects */
@@ -81,23 +74,22 @@
     padding: 10px;
     color: white;
     text-decoration: none;
-    transition: background-color 0.3s ease, color 0.3s ease; /* Faster and smoother */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Faster hover effect */
 }
 
 /* Hover effect for dropdown content */
 .dropdown-menu a:hover {
-    background-color: #3B82F6; /* Tailwind's blue-500 */
+    background-color: #425464; /* Tailwind's blue-500 */
     color: white; /* Ensure text stays white */
-    border-radius: 0.25rem; /* Rounded edges on hover */
+    border-radius: 0.25rem; /* Optional: round the edges when hovering */
 }
-
 
     .bg-custom {
     background-color: #1f2837;
 }
 
     .bg-custom1{
-        background-color: #111827;
+        background-color: #1d2b39;
     }
 
 .betcha-text,

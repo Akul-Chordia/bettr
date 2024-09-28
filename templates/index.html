@@ -62,7 +62,7 @@
             padding: 0.75rem;
             border: 2px solid #374151; /* Tailwind's gray-700 */
             border-radius: 0.5rem;
-            background-color: #111827; /* Tailwind's gray-900 */
+            background-color: #1d2b39; /* Tailwind's gray-900 */
             color: #fff;
             margin-bottom: 1rem;
             transition: border-color 0.3s ease;
@@ -112,7 +112,7 @@
         }
 
         .signup-modal-content .input-field {
-            background-color: #111827; /* Darker background for inputs */
+            background-color: #1d2b39; /* Darker background for inputs */
         }
 
         /* Responsive adjustments */
@@ -155,7 +155,7 @@
 
 /* Hover effect for dropdown content */
 .dropdown-menu a:hover {
-    background-color: #3B82F6; /* Tailwind's blue-500 */
+    background-color: #425464; /* Tailwind's blue-500 */
     color: white; /* Ensure text stays white */
     border-radius: 0.25rem; /* Optional: round the edges when hovering */
 }
@@ -259,6 +259,49 @@
             font-size: 16px;
         }
 
+        .btn-primary {
+      display: inline-block;
+      padding: 10px 40px;
+      font-size: 1.25rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #fff;
+      background: linear-gradient(to right, #4299e1, #48bb78); /* Gradient from blue to green */
+      border-radius: 50px;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3); /* Soft shadow */
+      transition: all 0.3s ease; /* Smooth transition */
+      position: relative;
+      overflow: hidden;
+  }
+
+  .btn-primary:before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 300%;
+      height: 300%;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 100%;
+      transition: all 0.75s ease-in-out;
+      transform: translate(-50%, -50%) scale(0.1);
+      z-index: 0;
+  }
+
+  .btn-primary:hover:before {
+      transform: translate(-50%, -50%) scale(1);
+  }
+
+  .btn-primary:hover {
+      transform: scale(1.05); /* Slight grow on hover */
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4); /* Increase shadow on hover */
+  }
+
+  .btn-primary:active {
+      transform: scale(0.98); /* Slight shrink when pressed */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Less shadow when clicked */
+  }
+
     </style>
 </head>
 <body class="bg-gray-900 text-white">
@@ -274,27 +317,36 @@
         make bets between your friend uwu abc def ghi jhk somehting blah blah blah!
     </p>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 max-w-4xl mx-auto">
-        <div class="bg-gray-800 p-8 rounded text-white" style="box-shadow: 0 4px 20px rgba(44, 63, 79, 0.5);"> <!-- Custom shadow color -->
+        <div class="bg-gray-800 p-8 rounded text-white" style="box-shadow: 0 4px 20px rgba(44, 63, 79, 0.5);">
             <h2 class="text-2xl font-semibold">Expert Tips</h2>
             <p>Get insights from seasoned players to make informed bets.</p>
         </div>
-        <div class="bg-gray-800 p-8 rounded text-white" style="box-shadow: 0 4px 20px rgba(44, 63, 79, 0.5);"> <!-- Custom shadow color -->
+        <div class="bg-gray-800 p-8 rounded text-white" style="box-shadow: 0 4px 20px rgba(44, 63, 79, 0.5);">
             <h2 class="text-2xl font-semibold">Live Updates</h2>
             <p>Stay updated with real-time odds and game changes.</p>
         </div>
-        <div class="bg-gray-800 p-8 rounded text-white" style="box-shadow: 0 4px 20px rgba(44, 63, 79, 0.5);"> <!-- Custom shadow color -->
+        <div class="bg-gray-800 p-8 rounded text-white" style="box-shadow: 0 4px 20px rgba(44, 63, 79, 0.5);">
             <h2 class="text-2xl font-semibold">Community Forum</h2>
             <p>Connect with other bettors to share strategies and experiences.</p>
         </div>
     </div>
 
+    <!-- Attractive Button -->
+<div class="mt-8 text-center">
+    <a href="bet" class="btn-primary">
+        Make A Bet
     </a>
 </div>
 
 
 
+
+
+
+
+
 <div id="notifModal" class="modal {% if notifications %} active {% endif %}">
-    <div class="modal-content" style="background-color: #111827;">
+    <div class="modal-content" style="background-color: #1d2b39;">
         <button class="close-button" onclick="closeNotifModal()">&times;</button>
         <div class="modal-header">
             <h2 class="text-white">Notifications</h2>

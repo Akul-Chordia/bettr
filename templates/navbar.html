@@ -15,24 +15,18 @@
                 Up
             </button>
         {% endif %}
-        <div class="relative">
+
+                {% if user.is_authenticated %}
+                            <div class="relative">
             <div class="text-3xl cursor-pointer hamburger-icon">☰</div>  <!-- Hamburger Menu -->
             <div id="dropdown" class="dropdown-menu">
-                {% if user.is_authenticated %}
                     <a href="{% url 'notifications' %}" class="block px-4 py-2 text-left w-full hover:bg-gray-700">Notification</a>
                     <a href="{% url 'profile' %}" class="block px-4 py-2 text-left w-full hover:bg-gray-700">Profile</a>
                     <a href="{% url 'my_bets' %}" class="block px-4 py-2 text-left w-full hover:bg-gray-700">My Bets</a>
+                    <a href="{% url 'wallet' %}" class="block px-4 py-2 text-left w-full hover:bg-gray-700">Wallet</a>
                     <a href="{% url 'logout' %}" class="block px-4 py-2 text-left w-full hover:bg-gray-700">Logout</a>
-                    <button id="toggleDarkMode" class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded">
-                        Toggle Dark Mode
-                    </button>
                 {% else %}
-                    <button class="block px-4 py-2 text-left w-full hover:bg-gray-700" onclick="openLoginModal()">
-                        Login
-                    </button>
-                    <button class="block px-4 py-2 text-left w-full hover:bg-gray-700" onclick="openSignupModal()">Sign
-                        Up
-                    </button>
+
                 {% endif %}
             </div>
         </div>

@@ -7,6 +7,57 @@
     <title>Wallet</title>
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
     <style>
+
+        /* Dropdown Styles */
+.dropdown-menu {
+    position: absolute;
+    right: 0;
+    margin-top: 10px;
+    background-color: #1F2937; /* Tailwind's gray-800 */
+    border-radius: 0.5rem;
+    width: 200px;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out, visibility 0s 0.3s; /* Faster show transition and delay visibility hide */
+}
+
+/* Show the dropdown on hover */
+.relative:hover .dropdown-menu {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out, visibility 0s; /* Faster hide transition with no delay */
+}
+
+/* Dropdown content hover effects */
+.dropdown-menu a {
+    display: block;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Faster hover effect */
+}
+
+/* Hover effect for dropdown content */
+.dropdown-menu a:hover {
+    background-color: #425464; /* Tailwind's blue-500 */
+    color: white; /* Ensure text stays white */
+    border-radius: 0.25rem; /* Optional: round the edges when hovering */
+}
+        .betcha-text,
+        .hamburger-icon {
+            color: white; /* Default color */
+        }
+
+        /* Dark mode styles */
+        .dark-mode .betcha-text,
+        .dark-mode .hamburger-icon {
+            color: black; /* Color when dark mode is toggled */
+        }
+
+        /* Set text colors for the table and headings */
+        .text-white {
+            color: white;
+        }
         /* Container styling */
         .container {
             max-width: 600px;
@@ -156,10 +207,14 @@
         .submit-button:hover {
             background-color: #2563EB;
         }
+
+
     </style>
 </head>
 <body bgcolor="#111827">
+{% include 'navbar.html' %}
     <div class="container">
+
         <h1>Wallet</h1>
         <div class="current-balance">
             Current Balance: <span id="current-balance">{{ user_wallet.wallet_balance }}</span>
