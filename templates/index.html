@@ -319,7 +319,7 @@
                             {% endwith %}
                         {% elif notification.notification_type == 'claim_verification' %}
                             {% with notification.bet as bet %}
-                                <p>{{ bet.bet_maker.username }} claimed {{ bet.amount }} {{ bet.currency }} for {{ bet.terms }}</p>
+                                <p>{{ bet.bet_maker.username }} claimed {{ bet.amount }} {{ bet.currency }} for '{{ bet.terms }}'</p>
                                 <form method="POST" action="{% url 'claim_verification' %}">
                                     {% csrf_token %}
                                     <input type="hidden" name="bet" value="{{ bet.id }}"/>

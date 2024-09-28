@@ -120,7 +120,7 @@
 
 {% if my_bets %}
     <div class="overflow-x-auto">
-        <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+    <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
             <thead class="bg-blue-300 text-white"> <!-- Added text-white class -->
                 <tr>
                     <th class="py-3 px-5 text-left">Status</th>
@@ -133,39 +133,55 @@
             </thead>
             <tbody>
                 {% for bet in my_bets %}
-                    <tr class="row-container bg-custom border-b hover:bg-relative text-white"> <!-- Added text-white class -->
-                        <td class="py-3 px-5">{{ bet.bet_active }}</td>
-                        <td class="py-3 px-5">
-                            {% if bet.bet_maker == request.user %}
-                                {{ bet.bet_recipient.username }}
-                            {% else %}
-                                {{ bet.bet_maker.username }}
-                            {% endif %}
-                        </td>
-                        <td class="py-3 px-5">{{ bet.amount }}</td>
-                        <td class="py-3 px-5">{{ bet.currency }}</td>
-                        <td class="py-3 px-5">{{ bet.placed_at }}</td>
-                        <td class="py-3 px-5">
-                            {% if not bet.verified_0 or not bet.verified_1 %}
-                                <form method="POST" action="{% url 'claim_bet' %}">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="bet" value="{{ bet.id }}"/>
-                                    <button type="submit" name="claim_bet" class="verify-button">Verify</button>
-                                </form>
-                            {% else %}
-                                Verified
-                            {% endif %}
-                        </td>
+                    {% if bet.winner is None %}
 
-                        <!-- Popup div for displaying terms -->
-                        <div class="popup">
-                            <strong>Terms and Conditions:</strong>
-                            <p>{{ bet.terms }}</p>
-                        </div>
-                    </tr>
+                        <tr class="row-container bg-custom border-b hover:bg-relative text-white"> <!-- Added text-white class -->
+                            <td class="py-3 px-5">
+    {% if bet.bet_active %}
+        <span class="text-green-500 font-bold">Active</span>
+    {% else %}
+        <span class="text-red-500 font-bold">Pending</span>
+    {% endif %}
+</td>
+                            <td class="py-3 px-5">
+                                {% if bet.bet_maker == request.user %}
+                                    {{ bet.bet_recipient.username }}
+                                {% else %}
+                                    {{ bet.bet_maker.username }}
+                                {% endif %}
+                            </td>
+                            <td class="py-3 px-5">{{ bet.amount }}</td>
+                            <td class="py-3 px-5">{{ bet.currency }}</td>
+                            <td class="py-3 px-5">{{ bet.placed_at }}</td>
+                            <td class="py-3 px-5">
+                                {% if not bet.verified_0 or not bet.verified_1 %}
+                                    <form method="POST" action="{% url 'claim_bet' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="bet" value="{{ bet.id }}"/>
+                                        <button type="submit" name="claim_bet" class="verify-button">Verify</button>
+                                    </form>
+                                {% else %}
+                                    Verified
+                                {% endif %}
+                            </td>
+
+                            <!-- Popup div for displaying terms -->
+                            <div class="popup">
+                                <strong>Terms and Conditions:</strong>
+                                <p>{{ bet.terms }}</p>
+                            </div>
+                        </tr>
+                    {% endif %}
                 {% endfor %}
+
+
             </tbody>
         </table>
+    <div class="alert">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
     </div>
 {% else %}
     <p class="text-gray-600">You have no bets.</p> <!-- Change this color if needed -->

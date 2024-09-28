@@ -71,7 +71,7 @@ def create_user_profile(request):
         user = User.objects.create_user(username=username , first_name=first_name , last_name=last_name , email=email ,
                                         password=password)
         user.save()
-        user_wallet = UserWallet.objects.create(user_id=user.id , wallet_balance=wallet_balance, on_hold_balance=0.00)
+        user_wallet = UserWallet.objects.create(user_id=user.id , wallet_balance=wallet_balance , on_hold_balance=0.00)
         user_wallet.save()
 
         message = f"User {username} created successfully!"
@@ -162,7 +162,6 @@ def validate_bet(request):
         outcome = request.POST.get('outcome')
         bet_id = request.POST.get('bet')
         notification_id = request.POST.get('notification_id')
-        print(1)
 
         bet = Bet.objects.get(id=bet_id)
         user_wallet = UserWallet.objects.get(user_id=request.user)
@@ -183,12 +182,11 @@ def validate_bet(request):
                 notification.is_read = True
                 notification.save()
         elif outcome == '0':
-            bet.delete()
             sender_wallet.on_hold_balance -= bet.amount
             sender_wallet.wallet_balance += bet.amount
             sender_wallet.save()
-            notification.is_read = True
-            notification.save()
+            notification.delete()
+            bet.delete()
     return render(request , 'index.html')
 
 
@@ -197,60 +195,63 @@ def claim_dispute(request):
         outcome = request.POST.get('outcome')
         bet_id = request.POST.get('bet')
         notification_id = request.POST.get('notification_id')
+        outcome = int(outcome)
         bet = Bet.objects.get(id=bet_id)
         notification = Notification.objects.get(id=notification_id)
-        notification.is_read = True
-        notification.save()
 
         if outcome == 1:
             if request.user == bet.bet_maker:
-                bet.winner_id = bet.bet_recipient
+                bet.winner_id = bet.bet_recipient_id
+
                 bet.save()
             elif request.user == bet.bet_recipient:
-                bet.winner_id = bet.bet_maker
+                bet.winner_id = bet.bet_maker_id
                 bet.save()
             else:
                 messages.error('Something went wrong')
                 return render(request , 'index.html')
-            transfer(1 , bet.winner , bet.amount * 2 , bet_id)
+            transfer(1 , bet.winner_id , (bet.amount * 2) , bet.id)
 
         elif outcome == 0:
             bet_notification = Notification.objects.create(
-                user_to_id=bet.arbitrator ,
+                user_to_id=bet.arbitrator.id ,
                 notification_type='arbitration_request' ,
-                user_from_id=request.user ,
                 bet_id=bet.id ,
                 created_at=datetime.now() ,
                 is_read=False
             )
             bet_notification.save()
-
-    return 0
+        notification.is_read = True
+        notification.save()
+    return render(request , 'my_bets.html')
 
 
 def arbitrator_rule(request):
     if request.method == 'POST':
         outcome = request.POST.get('outcome')
+        outcome = Decimal(outcome)
         bet_id = request.POST.get('bet')
         notification_id = request.POST.get('notification_id')
         bet = Bet.objects.get(id=bet_id)
-        notification = Notification.objects.filter(id=notification_id)
-        notification.is_read = True
-        notification.save()
+        notification = Notification.objects.get(id=notification_id)
 
         if outcome == -1:
-            bet.winner = bet.bet_maker
+            bet.winner_id = bet.bet_maker_id
             bet.save()
-            transfer(1 , bet.winner , bet.amount * 2 , bet_id)
+            transfer(1 , bet.winner_id , bet.amount * 2 , bet_id)
         elif outcome == 0:
-            transfer(1 , bet.bet_maker , bet.amount , bet_id)
-            transfer(1 , bet.bet_recipient , bet.amount , bet_id)
-            bet.delete()
-        elif outcome == 1:
-            bet.winner = bet.bet_recipient
+            bet.bet_active = False
             bet.save()
-            transfer(1 , bet.winner , bet.amount * 2 , bet_id)
-    return 0
+            transfer(1 , bet.bet_maker_id , bet.amount , bet_id)
+            transfer(1 , bet.bet_recipient_id , bet.amount , bet_id)
+        elif outcome == 1:
+            bet.winner_id = bet.bet_recipient_id
+            bet.save()
+            transfer(1 , bet.winner_id , bet.amount * 2 , bet_id)
+
+        notification.is_read = True
+        notification.save()
+    return redirect('index')
 
 
 def add_money(request):
@@ -314,16 +315,16 @@ def claim_bet(request):
         bet_id = request.POST.get('bet')
         bet = Bet.objects.get(id=bet_id)
 
-        if request.user == bet.bet_maker:
-            claimer = bet.bet_recipient
-        elif request.user == bet.bet_recipient:
-            claimer = bet.bet_maker
+        if request.user.id == bet.bet_maker_id:
+            claimer = bet.bet_recipient_id
+        elif request.user.id == bet.bet_recipient_id:
+            claimer = bet.bet_maker_id
         else:
             messages.error(request , 'idk wtf went wrong you\'re never supposed to reach here')
             return redirect('index.html')
 
         bet_notification = Notification.objects.create(
-            user_to=claimer ,
+            user_to_id=claimer ,
             notification_type='claim_verification' ,
             bet_id=bet.id ,
             created_at=datetime.now() ,
@@ -331,7 +332,7 @@ def claim_bet(request):
         )
 
         bet_notification.save()
-    return 0
+    return redirect('my_bets')
 
 
 def transfer(sender_id , receiver_id , amount , bet_id):
@@ -350,7 +351,7 @@ def transfer(sender_id , receiver_id , amount , bet_id):
 
     try:
         sender_waller.on_hold_balance -= amount
-        receiver_wallet.on_hold_balance += amount
+        receiver_wallet.wallet_balance += amount
         transaction.status = True
         sender_waller.save()
         receiver_wallet.save()
