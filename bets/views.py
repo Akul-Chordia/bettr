@@ -1,7 +1,9 @@
 from datetime import datetime
 from decimal import Decimal
 
+import smtplib
 import stripe
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate , login , logout
@@ -13,7 +15,8 @@ from django.utils import timezone
 from .models import Bet , Notification , UserWallet , Transaction
 
 stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
-
+email_user = settings.EMAIL_USER
+app_pass = settings.APP_PASS
 
 def index(request):
     return render(request , 'index.html')
@@ -151,6 +154,10 @@ def make_bet(request):
 
         bet_notification.save()
 
+        user = User.objects.get(id=bet_recipient)
+        send_email(user.email , user.first_name , 'bet_invite' , request.user)
+
+
         messages.success(request ,
                          f"Bet created between {bet_maker.username} and {bet_recipient.username} for {amount} {currency}.")
 
@@ -198,11 +205,10 @@ def claim_dispute(request):
         outcome = int(outcome)
         bet = Bet.objects.get(id=bet_id)
         notification = Notification.objects.get(id=notification_id)
-
+        payout = (bet.amount * Decimal('2'))
         if outcome == 1:
             if request.user == bet.bet_maker:
                 bet.winner_id = bet.bet_recipient_id
-
                 bet.save()
             elif request.user == bet.bet_recipient:
                 bet.winner_id = bet.bet_maker_id
@@ -210,7 +216,9 @@ def claim_dispute(request):
             else:
                 messages.error('Something went wrong')
                 return render(request , 'index.html')
-            transfer(1 , bet.winner_id , (bet.amount * 2) , bet.id)
+            bet.settled_at = datetime.now()
+            bet.save()
+            transfer(1 , bet.winner_id , payout , bet.id)
 
         elif outcome == 0:
             bet_notification = Notification.objects.create(
@@ -221,6 +229,8 @@ def claim_dispute(request):
                 is_read=False
             )
             bet_notification.save()
+            user = User.objects.get(id=bet.arbitrator.id)
+            send_email(user.email , user.first_name , 'arbitration_request' , request.user)
         notification.is_read = True
         notification.save()
     return render(request , 'my_bets.html')
@@ -234,11 +244,12 @@ def arbitrator_rule(request):
         notification_id = request.POST.get('notification_id')
         bet = Bet.objects.get(id=bet_id)
         notification = Notification.objects.get(id=notification_id)
+        payout = ((bet.amount * Decimal('2')) - Decimal('0.04') * bet.amount)
 
         if outcome == -1:
             bet.winner_id = bet.bet_maker_id
             bet.save()
-            transfer(1 , bet.winner_id , bet.amount * 2 , bet_id)
+            transfer(1 , bet.winner_id , payout , bet_id)
         elif outcome == 0:
             bet.bet_active = False
             bet.save()
@@ -247,8 +258,9 @@ def arbitrator_rule(request):
         elif outcome == 1:
             bet.winner_id = bet.bet_recipient_id
             bet.save()
-            transfer(1 , bet.winner_id , bet.amount * 2 , bet_id)
-
+            transfer(1 , bet.winner_id , payout , bet_id)
+        bet.settled_at = datetime.now()
+        bet.save()
         notification.is_read = True
         notification.save()
     return redirect('index')
@@ -332,7 +344,10 @@ def claim_bet(request):
         )
 
         bet_notification.save()
-    return redirect('my_bets')
+
+        user = User.objects.get(id=bet.claimer)
+        send_email(user.email , user.first_name , 'claim_verification' , request.user)
+    return render(request , 'my_bets.html')
 
 
 def transfer(sender_id , receiver_id , amount , bet_id):
@@ -397,3 +412,25 @@ def notification_view(request):
     notifications = Notification.objects.filter(user_to=request.user , is_read=False)
     bets = {notification.bet_id: Bet.objects.get(id=notification.bet_id) for notification in notifications}
     return render(request , 'index.html' , {'notifications': notifications , 'bets': bets})
+
+
+def send_email(client_email, client_name, notification_type, from_who):
+    if notification_type == 'bet_invite':
+        notify_text = "You have been sent a sent a BET INVITE from " + from_who
+    elif notification_type == 'claim_verification':
+        notify_text = from_who + " has claimed victory on your bet. Verify it."
+    elif notification_type == 'arbitration_request':
+        notify_text = "You have been asked to arbitrate a bet."
+    else:
+        notify_text = "Accidental email"
+
+    smtpserver = smtplib.SMTP_SSL('smtp.gmail.com' , 465)
+    smtpserver.ehlo()
+    smtpserver.login(email_user , app_pass)
+    sent_from = email_user
+    sent_to = client_email
+    email_text = "Dear "+ client_name +",\n\n" + notify_text + "\n\n" + "betcha (team)"
+    smtpserver.sendmail(sent_from , sent_to , email_text)
+
+    smtpserver.close()
+    return 0

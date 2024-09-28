@@ -1,10 +1,11 @@
 <!-- navbar.html -->
 <nav class="flex justify-between items-center p-4">
-<a href="{% url 'index' %}" class="text-3xl font-bold betcha-text">
-    BETCHA
-</a>
+    <a href="{% url 'index' %}" class="text-3xl font-bold betcha-text">
+        BETCHA
+    </a>
     <div class="flex items-center space-x-4">
-        <input type="text" placeholder="Search" class="p-2 rounded bg-gray-800 text-white" style="width: 650px;">
+        <input type="text" placeholder="Search" class="p-2 rounded text-white"
+               style="width: 650px; background-color: #1d2b39;">
         {% if user.is_authenticated %}
             <div class="text-white">Welcome, {{ user.username }}!</div>
         {% else %}
@@ -16,19 +17,22 @@
             </button>
         {% endif %}
 
-                {% if user.is_authenticated %}
-                            <div class="relative">
+        {% if user.is_authenticated %}
+            <div class="relative">
             <div class="text-3xl cursor-pointer hamburger-icon">☰</div>  <!-- Hamburger Menu -->
             <div id="dropdown" class="dropdown-menu">
-                    <a href="{% url 'notifications' %}" class="block px-4 py-2 text-left w-full hover:bg-gray-700">Notification</a>
-                    <a href="{% url 'profile' %}" class="block px-4 py-2 text-left w-full hover:bg-gray-700">Profile</a>
-                    <a href="{% url 'my_bets' %}" class="block px-4 py-2 text-left w-full hover:bg-gray-700">My Bets</a>
-                    <a href="{% url 'wallet' %}" class="block px-4 py-2 text-left w-full hover:bg-gray-700">Wallet</a>
-                    <a href="{% url 'logout' %}" class="block px-4 py-2 text-left w-full hover:bg-gray-700">Logout</a>
-                {% else %}
+            <a href="{% url 'notifications' %}"
+               class="block px-4 py-2 text-left w-full hover:bg-gray-700">Notification</a>
+            <a href="{% url 'bet' %}" class="block px-4 py-2 text-left w-full hover:bg-gray-700">Make a Bet</a>
+            <a href="{% url 'my_bets' %}" class="block px-4 py-2 text-left w-full hover:bg-gray-700">My Bets</a>
+            <a href="{% url 'wallet' %}" class="block px-4 py-2 text-left w-full hover:bg-gray-700">Wallet</a>
+            <a href="{% url 'profile' %}" class="block px-4 py-2 text-left w-full hover:bg-gray-700">Profile</a>
 
-                {% endif %}
-            </div>
+            <a href="{% url 'logout' %}" class="block px-4 py-2 text-left w-full hover:bg-gray-700">Logout</a>
+        {% else %}
+
+        {% endif %}
+        </div>
         </div>
     </div>
 </nav>

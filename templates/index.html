@@ -8,20 +8,20 @@
     <link href="{% static 'css/output.css' %}" rel="stylesheet">
     <style>
         /* Advanced Modal Styles */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0, 0, 0, 0.4); /* Black background with opacity */
-    display: none;
-    justify-content: center;
-    align-items: center;
-}
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0, 0, 0, 0.4); /* Black background with opacity */
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
 
         .modal.active {
             display: flex;
@@ -137,30 +137,28 @@
     transition: opacity 0.3s ease-in-out, visibility 0s 0.3s; /* Faster show transition and delay visibility hide */
 }
 
-/* Show the dropdown on hover */
-.relative:hover .dropdown-menu {
-    visibility: visible;
-    opacity: 1;
-    transition: opacity 0.3s ease-in-out, visibility 0s; /* Faster hide transition with no delay */
-}
+        /* Show the dropdown on hover */
+        .relative:hover .dropdown-menu {
+            visibility: visible;
+            opacity: 1;
+            transition: opacity 0.3s ease-in-out, visibility 0s; /* Faster hide transition with no delay */
+        }
 
-/* Dropdown content hover effects */
-.dropdown-menu a {
-    display: block;
-    padding: 10px;
-    color: white;
-    text-decoration: none;
-    transition: background-color 0.3s ease, color 0.3s ease; /* Faster hover effect */
-}
+        /* Dropdown content hover effects */
+        .dropdown-menu a {
+            display: block;
+            padding: 10px;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s ease, color 0.3s ease; /* Faster hover effect */
+        }
 
-/* Hover effect for dropdown content */
-.dropdown-menu a:hover {
-    background-color: #425464; /* Tailwind's blue-500 */
-    color: white; /* Ensure text stays white */
-    border-radius: 0.25rem; /* Optional: round the edges when hovering */
-}
-
-
+        /* Hover effect for dropdown content */
+        .dropdown-menu a:hover {
+            background-color: #425464; /* Tailwind's blue-500 */
+            color: white; /* Ensure text stays white */
+            border-radius: 0.25rem; /* Optional: round the edges when hovering */
+        }
 
 
         .scrollable {
@@ -214,34 +212,35 @@
             font-weight: bold;
         }
 
-.button-container {
-    display: flex; /* Use flexbox to align buttons horizontally */
-    gap: 1rem; /* Add space between buttons */
-}
+        .button-container {
+            display: flex; /* Use flexbox to align buttons horizontally */
+            gap: 1rem; /* Add space between buttons */
+        }
 
-.accept-button, .decline-button {
-    padding: 0.25rem 0.5rem; /* Button padding */
-    font-size: 0.875rem; /* Optional: Adjust font size */
-    border-radius: 0.25rem; /* Optional: Round the edges */
-    min-width: 80px; /* Set a minimum width for consistency */
-}
+        .accept-button, .decline-button {
+            padding: 0.25rem 0.5rem; /* Button padding */
+            font-size: 0.875rem; /* Optional: Adjust font size */
+            border-radius: 0.25rem; /* Optional: Round the edges */
+            min-width: 80px; /* Set a minimum width for consistency */
+        }
 
-.accept-button {
-    background-color: #2D865B;
-    color: white;
-}
+        .accept-button {
+            background-color: #2D865B;
+            color: white;
+        }
 
-.decline-button {
-    background-color: #914950;
-    color: white;
-}
-.accept-button:hover {
-    background-color: #48B480; /* Change background color on hover */
-}
+        .decline-button {
+            background-color: #914950;
+            color: white;
+        }
 
-.decline-button:hover {
-    background-color: #b10d0d; /* Change to a different shade on hover */
-}
+        .accept-button:hover {
+            background-color: #48B480; /* Change background color on hover */
+        }
+
+        .decline-button:hover {
+            background-color: #b10d0d; /* Change to a different shade on hover */
+        }
 
 
         .modal-header h2 {
@@ -260,42 +259,42 @@
         }
 
         .btn-primary {
-      display: inline-block;
-      padding: 10px 40px;
-      font-size: 1.25rem;
-      font-weight: bold;
-      text-transform: uppercase;
-      color: #fff;
-      background: linear-gradient(to right, #4299e1, #48bb78); /* Gradient from blue to green */
-      border-radius: 50px;
-      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3); /* Soft shadow */
-      transition: all 0.3s ease; /* Smooth transition */
-      position: relative;
-      overflow: hidden;
-  }
+            display: inline-block;
+            padding: 15px 50px;
+            font-size: 1.25rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #fff;
+            background: linear-gradient(to right, #4299e1, #48bb78); /* Gradient from blue to green */
+            border-radius: 50px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3); /* Soft shadow */
+            transition: all 0.3s ease; /* Smooth transition */
+            position: relative;
+            overflow: hidden;
+        }
 
-  .btn-primary:before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 300%;
-      height: 300%;
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 100%;
-      transition: all 0.75s ease-in-out;
-      transform: translate(-50%, -50%) scale(0.1);
-      z-index: 0;
-  }
+        .btn-primary:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 100%;
+            transition: all 0.75s ease-in-out;
+            transform: translate(-50%, -50%) scale(0.1);
+            z-index: 0;
+        }
 
-  .btn-primary:hover:before {
-      transform: translate(-50%, -50%) scale(1);
-  }
+        .btn-primary:hover:before {
+            transform: translate(-50%, -50%) scale(1);
+        }
 
-  .btn-primary:hover {
-      transform: scale(1.05); /* Slight grow on hover */
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4); /* Increase shadow on hover */
-  }
+        .btn-primary:hover {
+            transform: scale(1.05); /* Slight grow on hover */
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4); /* Increase shadow on hover */
+        }
 
   .btn-primary:active {
       transform: scale(0.98); /* Slight shrink when pressed */
@@ -314,16 +313,18 @@
         "Lorem ipsum dolor sit amet, consectetur!"
     </h1>
     <p class="text-lg text-gray-600 mb-8 text-center max-w-2xl">
-        make bets between your friend uwu abc def ghi jhk somehting blah blah blah!
+        Make safe and secure personalized bets between anyone anywhere
     </p>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 max-w-4xl mx-auto">
-        <div class="bg-gray-800 p-8 rounded text-white" style="box-shadow: 0 4px 20px rgba(44, 63, 79, 0.5);">
-            <h2 class="text-2xl font-semibold">Expert Tips</h2>
-            <p>Get insights from seasoned players to make informed bets.</p>
+        <div class="p-8 rounded text-white" style="background-color: #607abc; background-image: url('path/to/your/image.jpg'); background-size: cover; background-position: center; box-shadow: 0 4px 20px rgba(44, 63, 79, 0.5);">
+
+            <h6 class="text-lg font-bold custom-heading">FREE TIER</h6>
+            <p>Make UNLIMITED free bets between friends by choosing your own arbitrator.</p>
         </div>
-        <div class="bg-gray-800 p-8 rounded text-white" style="box-shadow: 0 4px 20px rgba(44, 63, 79, 0.5);">
-            <h2 class="text-2xl font-semibold">Live Updates</h2>
-            <p>Stay updated with real-time odds and game changes.</p>
+        <div class="p-8 rounded text-white" style="background-color: #da4c62; background-image: url('path/to/your/image.jpg'); background-size: cover; background-position: center; box-shadow: 0 4px 20px rgba(44, 63, 79, 0.5);">
+            <h2 class="text-2xl font-bold custom-heading"> BET WITH STRANGERS </h2>
+            <p>Make secure bets with complete strangers, and we'll arbitrate them for you</p>
+            <h6 class="text-sm font-thin custom-heading1 "> **at a low 2% cost** </h6>
         </div>
         <div class="bg-gray-800 p-8 rounded text-white" style="box-shadow: 0 4px 20px rgba(44, 63, 79, 0.5);">
             <h2 class="text-2xl font-semibold">Community Forum</h2>
@@ -345,107 +346,126 @@
 
 
 
-<div id="notifModal" class="modal {% if notifications %} active {% endif %}">
-    <div class="modal-content" style="background-color: #1d2b39;">
-        <button class="close-button" onclick="closeNotifModal()">&times;</button>
-        <div class="modal-header">
-            <h2 class="text-white">Notifications</h2>
-        </div>
-        <div class="modal-body scrollable">
-            {% if notifications %}
-                {% for notification in notifications %}
-                    <div class="notification text-white">
-                        {% if notification.notification_type == 'bet_invite' %}
-                            {% with notification.bet as bet %}
-                                <p>{{ bet.bet_maker.username }} bet you {{ bet.amount }}{{ bet.currency }} for {{ bet.terms }}</p>
-                                <form method="POST" action="{% url 'validate_bet' %}">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="bet" value="{{ bet.id }}"/>
-                                    <input type="hidden" name="notification_id" value="{{ notification.id }}"/>
-                                    <div class="button-container">
-                                        <button type="submit" name="outcome" value="1" class="submit-button
-                                        accept-button ">Accept</button>
-                                        <button type="submit" name="outcome" value="0" class="submit-button decline-button">Decline</button>
-                                    </div>
-                                </form>
-                            {% endwith %}
-                        {% elif notification.notification_type == 'claim_verification' %}
-                            {% with notification.bet as bet %}
-                                <p>{{ bet.bet_maker.username }} claimed {{ bet.amount }} {{ bet.currency }} for '{{ bet.terms }}'</p>
-                                <form method="POST" action="{% url 'claim_verification' %}">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="bet" value="{{ bet.id }}"/>
-                                    <input type="hidden" name="notification_id" value="{{ notification.id }}"/>
-                                    <div class="button-container">
-                                        <button type="submit" name="outcome" value="1" class="submit-button accept-button">Accept</button>
-                                        <button type="submit" name="outcome" value="0" class="submit-button decline-button">Dispute</button>
-                                    </div>
-                                </form>
-                            {% endwith %}
-                        {% elif notification.notification_type == 'arbitration_request' %}
-                            {% with notification.bet as bet %}
-                                <p>Dispute on: {{ bet.terms }}</p>
-                                <form method="POST" action="{% url 'arbitration_request' %}">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="bet" value="{{ bet.id }}"/>
-                                    <input type="hidden" name="notification_id" value="{{ notification.id }}"/>
-                                    <div class="button-container">
-                                        <button type="submit" name="outcome" value="-1" class="submit-button accept-button">Bet maker wins</button>
-                                        <button type="submit" name="outcome" value="0" class="submit-button accept-button">Void Bet</button>
-                                        <button type="submit" name="outcome" value="1" class="submit-button decline-button">Bet receiver wins</button>
-                                    </div>
-                                </form>
-                            {% endwith %}
-                        {% endif %}
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p class="text-white">No new notifications.</p>
-            {% endif %}
+    <div id="notifModal" class="modal {% if notifications %} active {% endif %}">
+        <div class="modal-content" style="background-color: #1d2b39;">
+            <button class="close-button" onclick="closeNotifModal()">&times;</button>
+            <div class="modal-header">
+                <h2 class="text-white">Notifications</h2>
+            </div>
+            <div class="modal-body scrollable">
+                {% if notifications %}
+                    {% for notification in notifications %}
+                        <div class="notification text-white">
+                            {% if notification.notification_type == 'bet_invite' %}
+                                {% with notification.bet as bet %}
+                                    <p>{{ bet.bet_maker.username }} bet you {{ bet.amount }}{{ bet.currency }}
+                                        for {{ bet.terms }}</p>
+                                    <form method="POST" action="{% url 'validate_bet' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="bet" value="{{ bet.id }}"/>
+                                        <input type="hidden" name="notification_id" value="{{ notification.id }}"/>
+                                        <div class="button-container">
+                                            <button type="submit" name="outcome" value="1" class="submit-button
+                                        accept-button ">Accept
+                                            </button>
+                                            <button type="submit" name="outcome" value="0"
+                                                    class="submit-button decline-button">Decline
+                                            </button>
+                                        </div>
+                                    </form>
+                                {% endwith %}
+                            {% elif notification.notification_type == 'claim_verification' %}
+                                {% with notification.bet as bet %}
+                                    <p>{% if bet.bet_maker == request.user %}
+                                        {{ bet.bet_recipient.username }}
+                                    {% else %}
+                                        {{ bet.bet_maker.username }}
+                                    {% endif %}  claimed {{ bet.amount }} {{ bet.currency }} for '{{ bet.terms }}'</p>
+                                    <form method="POST" action="{% url 'claim_verification' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="bet" value="{{ bet.id }}"/>
+                                        <input type="hidden" name="notification_id" value="{{ notification.id }}"/>
+                                        <div class="button-container">
+                                            <button type="submit" name="outcome" value="1"
+                                                    class="submit-button accept-button">Accept
+                                            </button>
+                                            <button type="submit" name="outcome" value="0"
+                                                    class="submit-button decline-button">Dispute
+                                            </button>
+                                        </div>
+                                    </form>
+                                {% endwith %}
+                            {% elif notification.notification_type == 'arbitration_request' %}
+                                {% with notification.bet as bet %}
+                                    <p>{% if bet.bet_maker == request.user %}
+                                        {{ bet.bet_recipient.username }}
+                                    {% else %}
+                                        {{ bet.bet_maker.username }}
+                                    {% endif %} raised a dispute on: {{ bet.terms }}</p>
+                                    <form method="POST" action="{% url 'arbitration_request' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="bet" value="{{ bet.id }}"/>
+                                        <input type="hidden" name="notification_id" value="{{ notification.id }}"/>
+                                        <div class="button-container">
+                                            <button type="submit" name="outcome" value="-1" class="submit-button
+                                        accept-button">Bet maker wins {{ bet.bet_maker.username }}</button>
+                                            <button type="submit" name="outcome" value="0"
+                                                    class="submit-button accept-button">Void Bet
+                                            </button>
+                                            <button type="submit" name="outcome" value="1" class="submit-button
+                                        decline-button">Bet receiver wins {{ bet.bet_recipient.username }}</button>
+                                        </div>
+                                    </form>
+                                {% endwith %}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-white">No new notifications.</p>
+                {% endif %}
+            </div>
         </div>
     </div>
-</div>
 
 
-
-<!-- Login Modal -->
-<div id="loginModal" class="modal">
-    <div class="modal-content">
-        <button class="close-button">&times;</button>
-        <div class="modal-header">
-            <h2>Login</h2>
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <button class="close-button" onclick="closeLoginModal()">&times;</button>
+            <div class="modal-header">
+                <h2>Login</h2>
+            </div>
+            <form method="POST" action="{% url 'login' %}">
+                {% csrf_token %}
+                <input type="text" name="username" placeholder="Username" class="input-field" required/>
+                <input type="password" name="password" placeholder="Password" class="input-field" required/>
+                <button type="submit" class="submit-button">Login</button>
+            </form>
         </div>
-        <form method="POST" action="{% url 'login' %}">
-            {% csrf_token %}
-            <input type="text" name="username" placeholder="Username" class="input-field" required/>
-            <input type="password" name="password" placeholder="Password" class="input-field" required/>
-            <button type="submit" class="submit-button">Login</button>
-        </form>
     </div>
-</div>
 
-<!-- Sign-Up Modal -->
-<div id="signupModal" class="modal">
-    <div class="modal-content signup-modal-content">
-        <button class="close-button">&times;</button>
-        <div class="modal-header">
-            <h2>Sign Up</h2>
+    <!-- Sign-Up Modal -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content signup-modal-content">
+            <button class="close-button" onclick="closeSignupModal()">&times;</button>
+            <div class="modal-header">
+                <h2>Sign Up</h2>
+            </div>
+            <form method="POST" action="{% url 'signup' %}">
+                {% csrf_token %}
+                <input type="email" name="email" placeholder="Email" class="input-field" required/>
+                <input type="text" name="first_name" placeholder="First Name" class="input-field" required/>
+                <input type="text" name="last_name" placeholder="Last Name" class="input-field" required/>
+                <input type="text" name="dob" placeholder="Date of Birth (DD-MM-YYYY)" class="input-field" required/>
+                <input type="text" name="username" placeholder="Username" class="input-field" required/>
+                <input type="password" name="password" placeholder="Password" class="input-field" required/>
+                <button type="submit" class="submit-button">Sign Up</button>
+            </form>
         </div>
-        <form method="POST" action="{% url 'signup' %}">
-            {% csrf_token %}
-            <input type="email" name="email" placeholder="Email" class="input-field" required/>
-            <input type="text" name="first_name" placeholder="First Name" class="input-field" required/>
-            <input type="text" name="last_name" placeholder="Last Name" class="input-field" required/>
-            <input type="text" name="dob" placeholder="Date of Birth (DD-MM-YYYY)" class="input-field" required/>
-            <input type="text" name="username" placeholder="Username" class="input-field" required/>
-            <input type="password" name="password" placeholder="Password" class="input-field" required/>
-            <button type="submit" class="submit-button">Sign Up</button>
-        </form>
     </div>
-</div>
 
-<!-- Linking to dropdown.js -->
-<script src="{% static 'js/dropdown.js' %}"></script>
+    <!-- Linking to dropdown.js -->
+    <script src="{% static 'js/dropdown.js' %}"></script>
 
 </body>
 </html>
