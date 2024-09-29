@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Betcha</title>
+    <title>bettr.</title>
     <link href="{% static 'css/output.css' %}" rel="stylesheet">
     <style>
         /* Advanced Modal Styles */
@@ -330,7 +330,7 @@
 <div class="flex flex-col items-center mt-16">
     <h1 class="text-4xl font-bold mb-4 text-center">
 
-        TAILORED BETS FOR EVERYONE (and everything)
+        we're just bettr.
     </h1>
     <p class="text-lg text-gray-600 mb-8 text-center max-w-2xl">
         Make safe and secure personalized bets between anyone anywhere
@@ -348,7 +348,7 @@
         </div>
                 <div class="p-8 rounded text-white" style="background-color: #ef933e; background-image: url('path/to/your/image.jpg'); background-size: cover; background-position: center; box-shadow: 0 4px 20px rgba(44, 63, 79, 0.5);">
 
-            <h2 class="text-2xl font-bold custom-heading">GET PAID TO CRUSH EGOS</h2>
+            <h2 class="text-2xl font-bold custom-heading">TAILORED BETS FOR EVERYONE (and everything)</h2>
             <p>Next time you see a snarky comment, make them put their money where their mouth is.</p>
         </div>
     </div>
@@ -429,7 +429,7 @@
                                         <input type="hidden" name="notification_id" value="{{ notification.id }}"/>
                                         <div class="button-container">
                                             <button type="submit" name="outcome" value="-1" class="submit-button
-                                        accept-button">Bet maker wins {{ bet.bet_maker.username }}</button>
+                                        accept-button">{{ bet.bet_maker.username }} is bettr. </button>
                                             <button type="submit" name="outcome" value="0"
                                                     class="submit-button accept-button">Void Bet
                                             </button>

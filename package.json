@@ -1,7 +1,7 @@
 
 
 {
-  "name": "betcha",
+  "name": "bettr",
   "version": "1.0.0",
   "scripts": {
     "build:css": "tailwindcss -i static/css/input.css -o static/css/output.css"

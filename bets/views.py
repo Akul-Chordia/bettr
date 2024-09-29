@@ -154,8 +154,8 @@ def make_bet(request):
 
         bet_notification.save()
 
-        user = User.objects.get(id=bet_recipient)
-        send_email(user.email , user.first_name , 'bet_invite' , request.user)
+        # user = User.objects.get(id=bet_recipient)
+        # send_email(user.email , user.first_name , 'bet_invite' , request.user)
 
 
         messages.success(request ,
@@ -229,8 +229,8 @@ def claim_dispute(request):
                 is_read=False
             )
             bet_notification.save()
-            user = User.objects.get(id=bet.arbitrator.id)
-            send_email(user.email , user.first_name , 'arbitration_request' , request.user)
+            # user = User.objects.get(id=bet.arbitrator.id)
+            # send_email(user.email , user.first_name , 'arbitration_request' , request.user)
         notification.is_read = True
         notification.save()
     return render(request , 'my_bets.html')
@@ -345,8 +345,8 @@ def claim_bet(request):
 
         bet_notification.save()
 
-        user = User.objects.get(id=bet.claimer)
-        send_email(user.email , user.first_name , 'claim_verification' , request.user)
+        # user = User.objects.get(id=bet.claimer)
+        # send_email(user.email , user.first_name , 'claim_verification' , request.user)
     return render(request , 'my_bets.html')
 
 
@@ -414,23 +414,23 @@ def notification_view(request):
     return render(request , 'index.html' , {'notifications': notifications , 'bets': bets})
 
 
-def send_email(client_email, client_name, notification_type, from_who):
-    if notification_type == 'bet_invite':
-        notify_text = "You have been sent a sent a BET INVITE from " + from_who
-    elif notification_type == 'claim_verification':
-        notify_text = from_who + " has claimed victory on your bet. Verify it."
-    elif notification_type == 'arbitration_request':
-        notify_text = "You have been asked to arbitrate a bet."
-    else:
-        notify_text = "Accidental email"
-
-    smtpserver = smtplib.SMTP_SSL('smtp.gmail.com' , 465)
-    smtpserver.ehlo()
-    smtpserver.login(email_user , app_pass)
-    sent_from = email_user
-    sent_to = client_email
-    email_text = "Dear "+ client_name +",\n\n" + notify_text + "\n\n" + "betcha (team)"
-    smtpserver.sendmail(sent_from , sent_to , email_text)
-
-    smtpserver.close()
-    return 0
+# def send_email(client_email, client_name, notification_type, from_who):
+#     if notification_type == 'bet_invite':
+#         notify_text = "You have been sent a sent a BET INVITE from " + from_who
+#     elif notification_type == 'claim_verification':
+#         notify_text = from_who + " has claimed victory on your bet. Verify it."
+#     elif notification_type == 'arbitration_request':
+#         notify_text = "You have been asked to arbitrate a bet."
+#     else:
+#         notify_text = "Accidental email"
+#
+#     smtpserver = smtplib.SMTP_SSL('smtp.gmail.com' , 465)
+#     smtpserver.ehlo()
+#     smtpserver.login(email_user , app_pass)
+#     sent_from = email_user
+#     sent_to = client_email
+#     email_text = "Dear "+ client_name +",\n\n" + notify_text + "\n\n" + "bettr (team)"
+#     smtpserver.sendmail(sent_from , sent_to , email_text)
+#
+#     smtpserver.close()
+#     return 0
